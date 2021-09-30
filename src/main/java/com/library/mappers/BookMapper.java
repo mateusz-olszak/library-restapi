@@ -1,16 +1,19 @@
 package com.library.mappers;
 
 import com.library.domain.Book;
-import com.library.domain.Reader;
 import com.library.dto.BookDto;
-import com.library.dto.ReaderDto;
+import com.library.service.CopyService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class BookMapper {
+
+    private CopyService copyService;
 
     public Book mapToBook(final BookDto bookDto){
         return new Book(
@@ -21,11 +24,13 @@ public class BookMapper {
     }
 
     public BookDto mapToBookDto(final Book book){
+        int copies = copyService.retrieveCopiesForGivenBook(book.getId());
         return new BookDto(
                 book.getId(),
                 book.getTitle(),
                 book.getAuthor(),
-                book.getYearOfPublication()
+                book.getYearOfPublication(),
+                copies
         );
     }
 

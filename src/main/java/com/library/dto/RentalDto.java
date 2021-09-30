@@ -1,35 +1,37 @@
 package com.library.dto;
 
-import com.library.domain.Reader;
+import com.library.status.Status;
 
 import java.time.LocalDate;
 
 public class RentalDto {
 
     private int id;
-    private BookDto book;
-    private ReaderDto reader;
+    private int copyId;
+    private int readerId;
     private LocalDate rentedFrom;
     private LocalDate rentedTo;
+    private Status completed;
 
-    public RentalDto(int id, BookDto book, ReaderDto reader, LocalDate rentedFrom, LocalDate rentedTo) {
+    public RentalDto(int id, int copyId, int readerId, LocalDate rentedFrom, LocalDate rentedTo, Status completed) {
         this.id = id;
-        this.book = book;
-        this.reader = reader;
+        this.copyId = copyId;
+        this.readerId = readerId;
         this.rentedFrom = rentedFrom;
         this.rentedTo = rentedTo;
+        this.completed = completed;
     }
 
     public int getId() {
         return id;
     }
 
-    public BookDto getBook() {
-        return book;
+    public int getCopyId() {
+        return copyId;
     }
 
-    public ReaderDto getReader() {
-        return reader;
+    public int getReaderId() {
+        return readerId;
     }
 
     public LocalDate getRentedFrom() {
@@ -38,5 +40,9 @@ public class RentalDto {
 
     public LocalDate getRentedTo() {
         return rentedTo;
+    }
+
+    public Status getCompleted() {
+        return completed;
     }
 }

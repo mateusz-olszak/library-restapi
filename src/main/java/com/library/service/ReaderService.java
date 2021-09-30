@@ -3,20 +3,17 @@ package com.library.service;
 import com.library.dao.ReaderRepository;
 import com.library.domain.Reader;
 import com.library.exceptions.ElementNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ReaderService {
 
     private ReaderRepository readerRepository;
-
-    @Autowired
-    public ReaderService(ReaderRepository readerRepository) {
-        this.readerRepository = readerRepository;
-    }
 
     public Reader saveReader(final Reader reader){
         return readerRepository.save(reader);

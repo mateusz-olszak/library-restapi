@@ -5,23 +5,18 @@ import com.library.domain.Rental;
 import com.library.exceptions.ElementNotFoundException;
 import com.library.exceptions.NoBooksAvailableException;
 import com.library.status.Status;
-import net.bytebuddy.dynamic.scaffold.MethodRegistry;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class RentalService {
 
     private RentalRepository rentalRepository;
-
-    @Autowired
-    public RentalService(RentalRepository rentalRepository) {
-        this.rentalRepository = rentalRepository;
-    }
 
     public Rental saveRental(final Rental rental) {
         return rentalRepository.save(rental);
@@ -40,8 +35,9 @@ public class RentalService {
     }
 
     public void createRental(final Rental rental) {
-        if (rental.getCopy().getStatus().equals(Status.AVAILABLE.name())){
-            rental.getCopy().setStatus(Status.RENTED.name());
+        if (rental.getCopy().getStatus().equals(Status.AVAILABLE)){
+            rental.getCopy().setStatus(Status.RENTED);
+            rental.setCompleted(Status.IN_USE);
             rentalRepository.save(rental);
         }else {
             throw new NoBooksAvailableException("There are no available books to rent");
@@ -51,8 +47,9 @@ public class RentalService {
     public void createMultipleRental(final List<Rental> rentals) {
         List<Rental> rentalList = new ArrayList<>();
         for(Rental rental : rentals){
-            if (rental.getCopy().getStatus().equals(Status.AVAILABLE.name())){
-                rental.getCopy().setStatus(Status.RENTED.name());
+            if (rental.getCopy().getStatus().equals(Status.AVAILABLE)){
+                rental.getCopy().setStatus(Status.RENTED);
+                rental.setCompleted(Status.IN_USE);
                 rentalList.add(rental);
             }else {
                 throw new NoBooksAvailableException("There are no available books to rent");
@@ -63,7 +60,8 @@ public class RentalService {
     }
 
     public void completeRental(final Rental rental) {
-        rental.getCopy().setStatus(Status.AVAILABLE.name());
+        rental.getCopy().setStatus(Status.AVAILABLE);
+        rental.setCompleted(Status.COMPLETED);
         saveRental(rental);
     }
 }

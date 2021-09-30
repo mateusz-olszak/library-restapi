@@ -1,5 +1,6 @@
 package com.library.domain;
 
+import com.library.status.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +11,19 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
         @NamedQuery(
                 name = "Copy.retrieveAvailableCopies",
-                query = "FROM Copy WHERE status = :status"
+                query = "FROM Copy WHERE status = 'AVAILABLE'"
+        ),
+        @NamedQuery(
+                name = "Copy.retrieveAvailableCopiesForGivenTitle",
+                query = "FROM Copy WHERE status = 'AVAILABLE' AND book.title LIKE concat(concat('%',:title),'%')"
         ),
         @NamedQuery(
                 name = "Copy.retrieveCopiesWithGivenTitle",
                 query = "FROM Copy WHERE book.title = :title"
+        ),
+        @NamedQuery(
+                name = "Copy.retrieveCopiesForGivenBook",
+                query = "FROM Copy WHERE book.id = :id"
         )
 })
 @Entity
@@ -25,7 +34,7 @@ import javax.validation.constraints.NotNull;
 public class Copy {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     @Column(name = "COPY_ID")
     private int id;
@@ -36,9 +45,10 @@ public class Copy {
 
     @NotNull
     @Column(name = "STATUS")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
-    public Copy(Book book, String status) {
+    public Copy(Book book, Status status) {
         this.book = book;
         this.status = status;
     }

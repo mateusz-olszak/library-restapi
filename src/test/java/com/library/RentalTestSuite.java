@@ -33,8 +33,8 @@ public class RentalTestSuite {
     void testCreateRental(){
         Reader reader = new Reader("Anthony","Joshua",new Date());
         Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
-        Copy copy = new Copy(book, Status.AVAILABLE.name());
-        Rental expectedRental = new Rental(copy,reader, LocalDate.now(),LocalDate.now().plusDays(7));
+        Copy copy = new Copy(book, Status.AVAILABLE);
+        Rental expectedRental = new Rental(copy,reader, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
         rentalService.createRental(expectedRental);
 
         Rental actualRental = null;
@@ -56,8 +56,8 @@ public class RentalTestSuite {
     void testCreateRentalWithoutAvailableCopy(){
         Reader reader = new Reader("Anthony","Joshua",new Date());
         Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
-        Copy copy = new Copy(book, Status.RENTED.name());
-        Rental rental = new Rental(copy,reader, LocalDate.now(),LocalDate.now().plusDays(7));
+        Copy copy = new Copy(book, Status.RENTED);
+        Rental rental = new Rental(copy,reader, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
 
         assertThrows(NoBooksAvailableException.class, () -> {
            rentalService.createRental(rental);
@@ -69,9 +69,9 @@ public class RentalTestSuite {
         Reader reader1 = new Reader("Anthony","Joshua",new Date());
         Reader reader2 = new Reader("John","Smith",new Date());
         Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
-        Copy copy = new Copy(book, Status.AVAILABLE.name());
-        Rental rental1 = new Rental(copy,reader1, LocalDate.now(),LocalDate.now().plusDays(7));
-        Rental rental2 = new Rental(copy,reader2, LocalDate.now(),LocalDate.now().plusDays(7));
+        Copy copy = new Copy(book, Status.AVAILABLE);
+        Rental rental1 = new Rental(copy,reader1, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
+        Rental rental2 = new Rental(copy,reader2, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
         rentalService.createRental(rental1);
 
         assertThrows(NoBooksAvailableException.class, () -> {
@@ -84,11 +84,11 @@ public class RentalTestSuite {
         Reader reader1 = new Reader("Anthony","Joshua",new Date());
         Reader reader2 = new Reader("John","Smith",new Date());
         Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
-        Copy copy1 = new Copy(book, Status.AVAILABLE.name());
-        Copy copy2 = new Copy(book, Status.AVAILABLE.name());
+        Copy copy1 = new Copy(book, Status.AVAILABLE);
+        Copy copy2 = new Copy(book, Status.AVAILABLE);
         book.setCopy(List.of(copy1,copy2));
-        Rental rental1 = new Rental(copy1,reader1, LocalDate.now(),LocalDate.now().plusDays(7));
-        Rental rental2 = new Rental(copy2,reader2, LocalDate.now(),LocalDate.now().plusDays(7));
+        Rental rental1 = new Rental(copy1,reader1, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
+        Rental rental2 = new Rental(copy2,reader2, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
         rentalService.createMultipleRental(List.of(rental1,rental2));
 
         Rental actualRental1 = null;
@@ -102,8 +102,8 @@ public class RentalTestSuite {
             e.getMessage();
         }
 
-        assertEquals(Status.RENTED.name(), actualRental1.getCopy().getStatus());
-        assertEquals(Status.RENTED.name(), actualRental2.getCopy().getStatus());
+        assertEquals(Status.RENTED, actualRental1.getCopy().getStatus());
+        assertEquals(Status.RENTED, actualRental2.getCopy().getStatus());
     }
 
     @Test
@@ -112,12 +112,12 @@ public class RentalTestSuite {
         Reader reader2 = new Reader("John","Smith",new Date());
         Reader reader3 = new Reader("Mark","Winston",new Date());
         Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
-        Copy copy1 = new Copy(book, Status.AVAILABLE.name());
-        Copy copy2 = new Copy(book, Status.AVAILABLE.name());
+        Copy copy1 = new Copy(book, Status.AVAILABLE);
+        Copy copy2 = new Copy(book, Status.AVAILABLE);
         book.setCopy(List.of(copy1,copy2));
-        Rental rental1 = new Rental(copy1,reader1, LocalDate.now(),LocalDate.now().plusDays(7));
-        Rental rental2 = new Rental(copy2,reader2, LocalDate.now(),LocalDate.now().plusDays(7));
-        Rental rental3 = new Rental(copy2,reader3, LocalDate.now(),LocalDate.now().plusDays(7));
+        Rental rental1 = new Rental(copy1,reader1, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
+        Rental rental2 = new Rental(copy2,reader2, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
+        Rental rental3 = new Rental(copy2,reader3, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
 
 
         assertThrows(NoBooksAvailableException.class, () -> {
@@ -126,11 +126,11 @@ public class RentalTestSuite {
     }
 
     @Test
-    void testCreateRental_checkIfStatusChanged(){
+    void testCreateRentalCheckIfStatusChanged(){
         Reader reader = new Reader("Anthony","Joshua",new Date());
         Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
-        Copy copy = new Copy(book, Status.AVAILABLE.name());
-        Rental expectedRental = new Rental(copy,reader, LocalDate.now(),LocalDate.now().plusDays(7));
+        Copy copy = new Copy(book, Status.AVAILABLE);
+        Rental expectedRental = new Rental(copy,reader, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
         rentalService.createRental(expectedRental);
 
         Rental actualRental = null;
@@ -143,29 +143,36 @@ public class RentalTestSuite {
             e.getMessage();
         }
 
-        assertEquals(Status.RENTED.name(), actualRental.getCopy().getStatus());
+        assertEquals(Status.RENTED, actualRental.getCopy().getStatus());
+        assertEquals(Status.IN_USE, actualRental.getCompleted());
 
         rentalService.deleteRental(actualId);
     }
 
     @Test
-    void testReturnBook_checkIfBookStatusChanged(){
+    void testReturnBookCheckIfBookStatusChanged(){
         Reader reader = new Reader("Anthony","Joshua",new Date());
         Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
-        Copy copy = new Copy(book, Status.AVAILABLE.name());
-        Rental rental = new Rental(copy,reader, LocalDate.now(),LocalDate.now().plusDays(7));
+        Copy copy = new Copy(book, Status.AVAILABLE);
+        Rental rental = new Rental(copy,reader, LocalDate.now(),LocalDate.now().plusDays(7), Status.IN_USE);
         rentalService.createRental(rental);
         int copyId = copy.getId();
+        int rentalId = rental.getId();
 
         rentalService.completeRental(rental);
         Copy expectedCopy = null;
+        Rental expectedRental = null;
         try {
             expectedCopy = copyService.findCopy(copyId);
+            expectedRental = rentalService.findRental(rentalId);
         }catch (ElementNotFoundException e){
             e.getMessage();
         }
 
-        assertEquals(Status.AVAILABLE.name(), expectedCopy.getStatus());
+        assertEquals(Status.AVAILABLE, expectedCopy.getStatus());
+        assertEquals(Status.COMPLETED, expectedRental.getCompleted());
+
+        rentalService.deleteRental(rentalId);
     }
 
 }

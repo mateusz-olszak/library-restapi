@@ -23,6 +23,12 @@ public class CopyController {
         return copyMapper.mapToListCopyDto(copies);
     }
 
+    @GetMapping(value = "/copies", params = "title")
+    List<CopyDto> getAllCopiesWithGivenTitle(@RequestParam("title") String title){
+        List<Copy> copies = copyService.retrieveAvailableCopiesForGivenTitle(title);
+        return copyMapper.mapToListCopyDto(copies);
+    }
+
     @GetMapping("copy")
     CopyDto getCopy(@RequestParam("id") int id) throws ElementNotFoundException {
         Copy copy = copyService.findCopy(id);
@@ -30,7 +36,7 @@ public class CopyController {
     }
 
     @PostMapping("/copies")
-    void saveCopy(@RequestBody CopyDto copyDto){
+    void saveCopy(@RequestBody CopyDto copyDto) throws ElementNotFoundException {
         Copy copy = copyMapper.mapToCopy(copyDto);
         copyService.saveCopy(copy);
     }
@@ -38,6 +44,13 @@ public class CopyController {
     @DeleteMapping("/copies/delete/{id}")
     void deleteCopy(@PathVariable int id){
         copyService.deleteCopy(id);
+    }
+
+    @PatchMapping("/copy/status/{id}")
+    void changeCopyStatus(@PathVariable int id, @RequestBody CopyDto copyDto) throws ElementNotFoundException{
+        Copy copy = copyService.findCopy(id);
+        copy.setStatus(copyDto.getStatus());
+        copyService.saveCopy(copy);
     }
 
 }

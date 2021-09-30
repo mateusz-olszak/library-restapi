@@ -1,19 +1,17 @@
 package com.library.dto;
 
 
+import com.library.status.Status;
+
 public class CopyDto {
 
     private int id;
-    private String bookTitle;
-    private String bookAuthor;
-    private int bookYearOfPublication;
-    private String status;
+    private int bookId;
+    private Status status;
 
-    public CopyDto(int id, String bookTitle, String bookAuthor, int bookYearOfPublication, String status) {
+    public CopyDto(int id, int bookId, Status status) {
         this.id = id;
-        this.bookTitle = bookTitle;
-        this.bookAuthor = bookAuthor;
-        this.bookYearOfPublication = bookYearOfPublication;
+        this.bookId = bookId;
         this.status = status;
     }
 
@@ -21,19 +19,11 @@ public class CopyDto {
         return id;
     }
 
-    public String getBookTitle() {
-        return bookTitle;
+    public int getBookId() {
+        return bookId;
     }
 
-    public String getBookAuthor() {
-        return bookAuthor;
-    }
-
-    public int getBookYearOfPublication() {
-        return bookYearOfPublication;
-    }
-
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 }

@@ -3,20 +3,17 @@ package com.library.service;
 import com.library.dao.BookRepository;
 import com.library.domain.Book;
 import com.library.exceptions.ElementNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class BookService {
 
     private BookRepository bookRepository;
-
-    @Autowired
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     public Book saveBook(final Book book){
         return bookRepository.save(book);

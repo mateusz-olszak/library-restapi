@@ -1,5 +1,6 @@
 package com.library.domain;
 
+import com.library.status.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.Date;
 public class Rental {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     @Column(name = "RENTAL_ID")
     private int id;
@@ -38,10 +39,14 @@ public class Rental {
     @Column(name = "RENATAL_TO")
     private LocalDate rentedTo;
 
-    public Rental(Copy copy, Reader reader, LocalDate rentedFrom, LocalDate rentedTo) {
+    @Enumerated(EnumType.STRING)
+    private Status completed;
+
+    public Rental(Copy copy, Reader reader, LocalDate rentedFrom, LocalDate rentedTo, Status completed) {
         this.copy = copy;
         this.reader = reader;
         this.rentedFrom = rentedFrom;
         this.rentedTo = rentedTo;
+        this.completed = completed;
     }
 }

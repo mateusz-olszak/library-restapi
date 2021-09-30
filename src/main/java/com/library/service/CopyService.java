@@ -1,30 +1,26 @@
 package com.library.service;
 
 import com.library.dao.CopyRepository;
-import com.library.domain.Book;
 import com.library.domain.Copy;
 import com.library.exceptions.ElementNotFoundException;
 import com.library.status.Status;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CopyService {
 
     private CopyRepository copyRepository;
 
-    @Autowired
-    public CopyService(CopyRepository copyRepository) {
-        this.copyRepository = copyRepository;
-    }
-
     public Copy saveCopy(final Copy copy){
-        if (!copy.getStatus().equals(Status.AVAILABLE.name()) &&
-            !copy.getStatus().equals(Status.DESTROYED.name()) &&
-            !copy.getStatus().equals(Status.RENTED.name()) &&
-            !copy.getStatus().equals(Status.LOST.name())
+        if (!copy.getStatus().equals(Status.AVAILABLE) &&
+            !copy.getStatus().equals(Status.DESTROYED) &&
+            !copy.getStatus().equals(Status.RENTED) &&
+            !copy.getStatus().equals(Status.LOST)
         )
             throw new IllegalArgumentException("Wrong copy status inserted");
 
@@ -32,6 +28,14 @@ public class CopyService {
     }
 
     public void saveAllCopies(List<Copy> copies){
+        for (Copy copy : copies){
+            if (!copy.getStatus().equals(Status.AVAILABLE) &&
+                    !copy.getStatus().equals(Status.DESTROYED) &&
+                    !copy.getStatus().equals(Status.RENTED) &&
+                    !copy.getStatus().equals(Status.LOST)
+            )
+                throw new IllegalArgumentException("Wrong copy status inserted");
+        }
         copyRepository.saveAll(copies);
     }
 
@@ -47,11 +51,20 @@ public class CopyService {
         return (List<Copy>) copyRepository.findAll();
     }
 
-    public List<Copy> retrieveAvailableCopies(String status){
-        return copyRepository.retrieveAvailableCopies(status);
+    public List<Copy> retrieveAvailableCopies(){
+        return copyRepository.retrieveAvailableCopies();
     }
 
     public List<Copy> retrieveCopiesWithGivenTitle(String title){
         return copyRepository.retrieveCopiesWithGivenTitle(title);
+    }
+
+    public Integer retrieveCopiesForGivenBook(final int id){
+        Integer copiesId = Math.toIntExact(copyRepository.retrieveCopiesForGivenBook(id).stream().map(copy -> copy.getId()).mapToInt(Integer::intValue).count());
+        return copiesId;
+    }
+
+    public List<Copy> retrieveAvailableCopiesForGivenTitle(String title){
+        return copyRepository.retrieveAvailableCopiesForGivenTitle(title);
     }
 }
