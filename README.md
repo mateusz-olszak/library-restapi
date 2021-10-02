@@ -41,5 +41,5 @@ Documentation how to use REST endpoints:
   }
   
 7. Return book:
-  @PUT localhost:8080/rentals/complete/1 <- {id}
+  @POST localhost:8080/rentals/complete/1 <- {id}
  
