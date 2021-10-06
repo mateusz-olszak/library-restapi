@@ -35,7 +35,7 @@ public class RentalController {
         rentalService.createRental(rental);
     }
 
-    @PutMapping("/rentals/complete/{id}")
+    @PostMapping("/rentals/complete/{id}")
     void completeRental(@PathVariable int id) throws ElementNotFoundException {
         Rental rental = rentalService.findRental(id);
         rentalService.completeRental(rental);

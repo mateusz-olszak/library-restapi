@@ -51,10 +51,6 @@ public class CopyService {
         return (List<Copy>) copyRepository.findAll();
     }
 
-    public List<Copy> retrieveAvailableCopies(){
-        return copyRepository.retrieveAvailableCopies();
-    }
-
     public List<Copy> retrieveCopiesWithGivenTitle(String title){
         return copyRepository.retrieveCopiesWithGivenTitle(title);
     }
@@ -64,7 +60,13 @@ public class CopyService {
         return copiesId;
     }
 
-    public List<Copy> retrieveAvailableCopiesForGivenTitle(String title){
-        return copyRepository.retrieveAvailableCopiesForGivenTitle(title);
+    public List<Copy> retrieveAvailableCopiesForGivenId(int id){
+        return copyRepository.retrieveAvailableCopiesForGivenId(id);
+    }
+
+    public Copy changeCopyStatus(int id, Status status) throws ElementNotFoundException {
+        Copy copy = copyRepository.findById(id).orElseThrow(() -> new ElementNotFoundException("Cannot find copy with given id"));
+        copy.setStatus(status);
+        return saveCopy(copy);
     }
 }

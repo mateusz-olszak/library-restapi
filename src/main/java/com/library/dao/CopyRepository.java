@@ -15,14 +15,11 @@ import java.util.Optional;
 public interface CopyRepository extends CrudRepository<Copy, Integer> {
 
     @Query
-    List<Copy> retrieveAvailableCopies();
-
-    @Query
     List<Copy> retrieveCopiesWithGivenTitle(String title);
 
     @Query
     List<Copy> retrieveCopiesForGivenBook(int id);
 
     @Query
-    List<Copy> retrieveAvailableCopiesForGivenTitle(String title);
+    List<Copy> retrieveAvailableCopiesForGivenId(int id);
 }

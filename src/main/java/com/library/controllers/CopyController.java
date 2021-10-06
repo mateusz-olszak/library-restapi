@@ -23,9 +23,9 @@ public class CopyController {
         return copyMapper.mapToListCopyDto(copies);
     }
 
-    @GetMapping(value = "/copies", params = "title")
-    List<CopyDto> getAllCopiesWithGivenTitle(@RequestParam("title") String title){
-        List<Copy> copies = copyService.retrieveAvailableCopiesForGivenTitle(title);
+    @GetMapping(value = "/copies", params = "id")
+    List<CopyDto> getAllCopiesWithGivenTitle(@RequestParam("id") int id){
+        List<Copy> copies = copyService.retrieveAvailableCopiesForGivenId(id);
         return copyMapper.mapToListCopyDto(copies);
     }
 
@@ -47,10 +47,8 @@ public class CopyController {
     }
 
     @PatchMapping("/copy/status/{id}")
-    void changeCopyStatus(@PathVariable int id, @RequestBody CopyDto copyDto) throws ElementNotFoundException{
-        Copy copy = copyService.findCopy(id);
-        copy.setStatus(copyDto.getStatus());
-        copyService.saveCopy(copy);
+    CopyDto changeCopyStatus(@PathVariable int id, @RequestBody CopyDto copyDto) throws ElementNotFoundException{
+        return copyMapper.maptoCopyDto(copyService.changeCopyStatus(id, copyDto.getStatus()));
     }
 
 }

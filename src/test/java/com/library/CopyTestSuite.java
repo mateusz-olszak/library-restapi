@@ -95,51 +95,6 @@ public class CopyTestSuite {
     }
 
     @Test
-    void testCheckAvailableAmountOfCopiesWithAllStatusAvailable(){
-        Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
-        Copy copy1 = new Copy(book, Status.AVAILABLE);
-        Copy copy2 = new Copy(book, Status.AVAILABLE);
-        Copy copy3 = new Copy(book, Status.AVAILABLE);
-        Copy copy4 = new Copy(book, Status.AVAILABLE);
-        List<Copy> copies = new ArrayList<>();
-        copies.add(copy1);
-        copies.add(copy2);
-        copies.add(copy3);
-        copies.add(copy4);
-        book.setCopy(copies);
-        copyService.saveAllCopies(List.of(copy1,copy2,copy3,copy4));
-
-        List<Copy> availableCopies = copyService.retrieveAvailableCopies();
-
-        assertEquals(4, availableCopies.size());
-
-        copyService.deleteCopy(copy1.getId());
-    }
-
-    @Test
-    void testCheckAvailableAmountOfCopiesWithNotAllStatusAvailable(){
-        Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
-        Copy copy1 = new Copy(book, Status.AVAILABLE);
-        Copy copy2 = new Copy(book, Status.AVAILABLE);
-        Copy copy3 = new Copy(book, Status.AVAILABLE);
-        Copy copy4 = new Copy(book, Status.RENTED);
-        List<Copy> copies = new ArrayList<>();
-        copies.add(copy1);
-        copies.add(copy2);
-        copies.add(copy3);
-        copies.add(copy4);
-        book.setCopy(copies);
-        copyService.saveAllCopies(List.of(copy1,copy2,copy3,copy4));
-
-        List<Copy> availableCopies = copyService.retrieveAvailableCopies();
-
-        assertNotEquals(4, availableCopies.size());
-        assertEquals(3,availableCopies.size());
-
-        copyService.deleteCopy(copy1.getId());
-    }
-
-    @Test
     void testCheckAvailableAmountOfCopiesWithAvailableStatusForGivenTitleWithAllCopiesAvailable(){
         Book book = new Book("The Big Fisherman","Lloyd C. Douglas",1948);
         Copy copy1 = new Copy(book, Status.AVAILABLE);
@@ -154,8 +109,8 @@ public class CopyTestSuite {
         book.setCopy(copies);
         copyService.saveAllCopies(List.of(copy1,copy2,copy3,copy4));
 
-        String title = "The Big Fisherman";
-        List<Copy> availableCopies = copyService.retrieveAvailableCopiesForGivenTitle(title);
+        int id = book.getId();
+        List<Copy> availableCopies = copyService.retrieveAvailableCopiesForGivenId(id);
 
         assertEquals(4, availableCopies.size());
 
@@ -177,8 +132,8 @@ public class CopyTestSuite {
         book.setCopy(copies);
         copyService.saveAllCopies(List.of(copy1,copy2,copy3,copy4));
 
-        String title = "The Big Fisherman";
-        List<Copy> availableCopies = copyService.retrieveAvailableCopiesForGivenTitle(title);
+        int id = book.getId();
+        List<Copy> availableCopies = copyService.retrieveAvailableCopiesForGivenId(id);
 
         assertNotEquals(4, availableCopies.size());
         assertEquals(3,availableCopies.size());

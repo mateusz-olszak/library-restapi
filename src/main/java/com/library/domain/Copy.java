@@ -10,12 +10,8 @@ import javax.validation.constraints.NotNull;
 
 @NamedQueries({
         @NamedQuery(
-                name = "Copy.retrieveAvailableCopies",
-                query = "FROM Copy WHERE status = 'AVAILABLE'"
-        ),
-        @NamedQuery(
-                name = "Copy.retrieveAvailableCopiesForGivenTitle",
-                query = "FROM Copy WHERE status = 'AVAILABLE' AND book.title LIKE concat(concat('%',:title),'%')"
+                name = "Copy.retrieveAvailableCopiesForGivenId",
+                query = "FROM Copy WHERE status = 'AVAILABLE' AND book.id = :id"
         ),
         @NamedQuery(
                 name = "Copy.retrieveCopiesWithGivenTitle",

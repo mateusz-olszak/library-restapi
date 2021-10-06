@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,8 @@ public class RentalService {
         if (rental.getCopy().getStatus().equals(Status.AVAILABLE)){
             rental.getCopy().setStatus(Status.RENTED);
             rental.setCompleted(Status.IN_USE);
+            rental.setRentedFrom(LocalDate.now());
+            rental.setRentedTo(LocalDate.now().plusDays(7));
             rentalRepository.save(rental);
         }else {
             throw new NoBooksAvailableException("There are no available books to rent");
