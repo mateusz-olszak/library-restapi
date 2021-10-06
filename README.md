@@ -31,7 +31,7 @@ Documentation how to use REST endpoints:
   }
   
 5. Check amount of available copies for given book title:
-  @GET localhost:8080/copies?title=Fisherman <- {title}
+  @GET localhost:8080/copies?id=1 <- {id}
   
 6. Rent a book: 
   @POST localhost:8080/rentals
