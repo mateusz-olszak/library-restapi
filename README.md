@@ -30,8 +30,8 @@ Documentation how to use REST endpoints:
     "status": "RENTED"
   }
   
-5. Check amount of available copies for given book title:
-  @GET localhost:8080/copies?id=1 <- {id}
+5. Check amount of available copies for given book:
+  @GET localhost:8080/copies?id=1 <- {bookId}
   
 6. Rent a book: 
   @POST localhost:8080/rentals
