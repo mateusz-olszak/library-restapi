@@ -1,20 +1,29 @@
 package com.library.dto;
 
-import com.library.domain.Reader;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@Data
+@NoArgsConstructor
 public class ReaderDto {
 
     private int id;
-    private String firstName;
-    private String lastName;
+    private String email;
+    private String password;
     private Date created;
 
-    public ReaderDto(int id, String firstName, String lastName, Date created) {
+    public ReaderDto(int id, String email, String password, Date created) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.created = created;
+    }
+
+    public ReaderDto(String email, String password, Date created) {
+        this.email = email;
+        this.password = password;
         this.created = created;
     }
 
@@ -22,12 +31,12 @@ public class ReaderDto {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getPassword() {
+        return password;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getEmail() {
+        return email;
     }
 
     public Date getCreated() {

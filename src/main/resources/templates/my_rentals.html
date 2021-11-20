@@ -1,0 +1,45 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="header :: page_head('Library')"></head>
+<body>
+<header th:replace="header :: header"></header>
+<main>
+    <div align="center" style="margin-top: 50px; padding: 15px;">
+        <table class="table">
+            <thead th:if="${rentals.size() > 0}">
+                <th>Photo</th>
+                <th>Title</th>
+                <th>Rental From</th>
+                <th>Rental To</th>
+                <th>Rental Status</th>
+            </thead>
+            <tbody>
+            <tr th:if="${rentals.size() > 0}" th:each="rental: ${rentals}">
+                <th scope="row">
+                    <img th:if="${rental.getCopy().getBook().getPhoto() != null}" th:src="@{${rental.getCopy().getBook().getBookThumbnail()}}">
+                    <span th:unless="${rental.getCopy().getBook().getPhoto() != null}" class="far fa-book fa-2x"></span>
+                </th>
+                <td th:text="${rental.getCopy().getBook().getTitle()}"></td>
+                <td th:text="${rental.getRentedFrom()}"></td>
+                <td th:text="${rental.getRentedTo()}"></td>
+                <td th:text="${rental.getCompleted()}"></td>
+                <td th:if="${rental.getCompleted().name() != 'COMPLETED'}">
+                    <a th:href="@{'/rentals/complete/' + ${rental.getId()}}">return</a> &nbsp;
+                </td>
+            </tr>
+            <span th:unless="${rentals.size() > 0}">No rentals found</span>
+            </tbody>
+        </table>
+    </div>
+</main>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#logoutLink").on("click", function (e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="header :: page_head('Library - Admin Edit Rental')"></head>
+<body>
+<header th:replace="header :: header"></header>
+<main>
+    <main>
+        <form class="newBookForm" th:action="@{/admin/rentals/save}" method="post" th:object="${rental}" enctype="multipart/form-data">
+            <label>
+                <p class="label-txt">RENTAL ID</p>
+                <input type="text" class="input" name="rentalId" maxlength="50" required th:field="*{id}" readonly>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <label>
+                <p class="label-txt">READER ID</p>
+                <input type="text" class="input"  maxlength="50" required th:field="*{reader.id}" readonly>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <label>
+                <p class="label-txt">BOOK ID</p>
+                <input type="text" class="input"  maxlength="50" required th:field="*{copy.book.id}" readonly>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <label>
+                <p class="label-txt">COPY ID</p>
+                <input type="text" class="input" maxlength="50" required th:field="*{copy.id}" readonly>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <label>
+                <p class="label-txt">COPY STATUS</p><br>
+                <select class="input" required th:field="*{copy.status}">
+                    <option th:value="${available}">AVAILABLE</option>
+                    <option th:value="${rented}">RENTED</option>
+                    <option th:value="${lost}">LOST</option>
+                    <option th:value="${destroyed}">DESTROYED</option>
+                </select><br>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <label>
+                <p class="label-txt">RENTAL STATUS</p><br>
+                <select class="input" required th:field="*{completed}">
+                    <option th:value="${in_use}">IN USE</option>
+                    <option th:value="${completed}">COMPLETED</option>
+                </select><br>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <button type="submit">submit</button>
+        </form>
+    </main>
+</main>
+</body>
+</html>

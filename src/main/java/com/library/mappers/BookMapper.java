@@ -17,27 +17,30 @@ public class BookMapper {
 
     public Book mapToBook(final BookDto bookDto){
         return new Book(
+                bookDto.getPhoto(),
                 bookDto.getTitle(),
                 bookDto.getAuthor(),
-                bookDto.getYearOfPublication()
+                bookDto.getYearOfPublication(),
+                bookDto.getDescription()
         );
     }
 
     public BookDto mapToBookDto(final Book book){
-        int copies = copyService.retrieveCopiesForGivenBook(book.getId());
+        int copies = copyService.retrieveAmountOfCopiesForGivenBook(book.getId());
         return new BookDto(
                 book.getId(),
                 book.getTitle(),
                 book.getAuthor(),
+                book.getDescription(),
                 book.getYearOfPublication(),
-                copies
+                copies,
+                book.getPhoto()
         );
     }
 
-    public List<BookDto> mapToListReaderDto(final List<Book> books){
+    public List<BookDto> mapToListBookDto(final List<Book> books){
         return books.stream()
                 .map(this::mapToBookDto)
                 .collect(Collectors.toList());
     }
-
 }

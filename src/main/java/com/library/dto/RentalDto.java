@@ -13,6 +13,9 @@ public class RentalDto {
     private LocalDate rentedTo;
     private Status completed;
 
+    public RentalDto() {
+    }
+
     public RentalDto(int id, int copyId, int readerId, LocalDate rentedFrom, LocalDate rentedTo, Status completed) {
         this.id = id;
         this.copyId = copyId;
@@ -20,6 +23,11 @@ public class RentalDto {
         this.rentedFrom = rentedFrom;
         this.rentedTo = rentedTo;
         this.completed = completed;
+    }
+
+    public RentalDto(int copyId, int readerId) {
+        this.copyId = copyId;
+        this.readerId = readerId;
     }
 
     public int getId() {

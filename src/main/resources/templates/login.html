@@ -1,0 +1,89 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.2/css/bootstrap.min.css}">
+    <link th:rel="stylesheet" th:href="@{/css/style.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/login.css}" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script th:src="@{/js/newBook.js}"></script>
+    <title>Library - Sign In</title>
+</head>
+<body>
+<header th:replace="header :: header"></header>
+<main>
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <span class="far fa-book fa-4x"></span>
+            </div>
+
+            <!-- Login Form -->
+            <form method="post" th:action="@{/readers/login}">
+                <div th:if="${param.error}">
+                    <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+                </div>
+                <div th:if="${param.logout}">
+                    <p class="text-warning">You have been logged out.</p>
+                </div>
+                <input type="email" id="email" class="fadeIn second" name="email" placeholder="email" required>
+                <input type="password" id="password" class="fadeIn third" name="password" placeholder="password" required>
+                <p>
+                    <input type="checkbox" name="loginCheckbox" id="loginAsAdmin">&nbsp;Login as Admin
+                </p>
+                <p>
+                    <input type="checkbox" name="loginCheckbox" id="loginAsReader">&nbsp;Login as Reader
+                </p>
+                <p>
+                    <input type="checkbox" name="remember-me">&nbsp;Remember Me
+                </p>
+                <input type="submit" class="fadeIn fourth" value="Log In">
+            </form>
+
+            <!-- Register -->
+            <div id="formFooter">
+                <a class="underlineHover" th:href="@{/readers/register}">Don't have an account yet?</a>
+            </div>
+
+        </div>
+    </div>
+</main>
+<script>
+
+    $(document).ready(function () {
+        $('input[name="loginCheckbox"]').on('change', function() {
+            $('input[name="loginCheckbox"]').not(this).prop('checked', false);
+        });
+    });
+
+    $("#loginAsAdmin").click(function () {
+        if ($("#loginAsAdmin").is(":checked")) {
+            $("#email").val("admin@gmail.com");
+            $("#password").val("admin");
+        }
+        else if (!$("loginAsAdmin").is(":checked")){
+            $("#email").val('');
+            $("#password").val('');
+        }
+    });
+
+    $("#loginAsReader").click(function () {
+        if ($("#loginAsReader").is(":checked")) {
+            $("#email").val("user@gmail.com");
+            $("#password").val("123");
+        }
+        else if (!$("loginAsReader").is(":checked")){
+            $("#email").val('');
+            $("#password").val('');
+        }
+    });
+</script>
+</body>
+</html>

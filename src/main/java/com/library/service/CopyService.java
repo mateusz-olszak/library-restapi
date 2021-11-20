@@ -5,7 +5,6 @@ import com.library.domain.Copy;
 import com.library.exceptions.ElementNotFoundException;
 import com.library.status.Status;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,52 +20,39 @@ public class CopyService {
             !copy.getStatus().equals(Status.DESTROYED) &&
             !copy.getStatus().equals(Status.RENTED) &&
             !copy.getStatus().equals(Status.LOST)
-        )
+        ) {
             throw new IllegalArgumentException("Wrong copy status inserted");
-
+        }
         return copyRepository.save(copy);
     }
 
-    public void saveAllCopies(List<Copy> copies){
-        for (Copy copy : copies){
-            if (!copy.getStatus().equals(Status.AVAILABLE) &&
-                    !copy.getStatus().equals(Status.DESTROYED) &&
-                    !copy.getStatus().equals(Status.RENTED) &&
-                    !copy.getStatus().equals(Status.LOST)
-            )
-                throw new IllegalArgumentException("Wrong copy status inserted");
-        }
-        copyRepository.saveAll(copies);
-    }
-
-    public void deleteCopy(final int id){
+    public void deleteCopy(int id){
         copyRepository.deleteById(id);
     }
 
-    public Copy findCopy(final int id) throws ElementNotFoundException {
-        return copyRepository.findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find copy"));
+    public void deleteAllCopiesMatchingBookId(int id) {
+        copyRepository.deleteAllByBook_Id(id);
+    }
+
+    public Copy findCopy(int id) throws ElementNotFoundException {
+        return copyRepository.findById(id).orElseThrow(ElementNotFoundException::new);
     }
 
     public List<Copy> findAllCopies(){
         return (List<Copy>) copyRepository.findAll();
     }
 
-    public List<Copy> retrieveCopiesWithGivenTitle(String title){
-        return copyRepository.retrieveCopiesWithGivenTitle(title);
-    }
-
-    public Integer retrieveCopiesForGivenBook(final int id){
-        Integer copiesId = Math.toIntExact(copyRepository.retrieveCopiesForGivenBook(id).stream().map(copy -> copy.getId()).mapToInt(Integer::intValue).count());
-        return copiesId;
+    public Integer retrieveAmountOfCopiesForGivenBook(int id){
+        return Math.toIntExact(copyRepository.findCopiesByBook_Id(id).stream().map(Copy::getId).mapToInt(Integer::intValue).count());
     }
 
     public List<Copy> retrieveAvailableCopiesForGivenId(int id){
-        return copyRepository.retrieveAvailableCopiesForGivenId(id);
+        return copyRepository.findCopiesByStatusAndAndBook_Id(Status.AVAILABLE,id);
     }
 
     public Copy changeCopyStatus(int id, Status status) throws ElementNotFoundException {
-        Copy copy = copyRepository.findById(id).orElseThrow(() -> new ElementNotFoundException("Cannot find copy with given id"));
+        Copy copy = copyRepository.findById(id).orElseThrow(ElementNotFoundException::new);
         copy.setStatus(status);
-        return saveCopy(copy);
+        return copyRepository.save(copy);
     }
 }

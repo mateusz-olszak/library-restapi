@@ -32,7 +32,7 @@ public class CopyController {
     @GetMapping("copy")
     CopyDto getCopy(@RequestParam("id") int id) throws ElementNotFoundException {
         Copy copy = copyService.findCopy(id);
-        return copyMapper.maptoCopyDto(copy);
+        return copyMapper.mapToCopyDto(copy);
     }
 
     @PostMapping("/copies")
@@ -48,7 +48,7 @@ public class CopyController {
 
     @PatchMapping("/copy/status/{id}")
     CopyDto changeCopyStatus(@PathVariable int id, @RequestBody CopyDto copyDto) throws ElementNotFoundException{
-        return copyMapper.maptoCopyDto(copyService.changeCopyStatus(id, copyDto.getStatus()));
+        return copyMapper.mapToCopyDto(copyService.changeCopyStatus(id, copyDto.getStatus()));
     }
 
 }

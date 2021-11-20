@@ -1,0 +1,37 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="header :: page_head('Library - View Book')"></head>
+<body>
+<header th:replace="header :: header"></header>
+<main>
+    <div class="container">
+        <div class="col-md-12">
+            <section class="panel">
+                <img class="viewImg" th:src="${book.getBookThumbnail()}">
+            </section>
+            <section class="panel">
+                <div class="panel-body">
+                        <h4 class="pro-d-title" th:text="${book.getTitle()}"></h4>
+                        <b>Author:</b> <p th:text="${book.getAuthor()}"></p>
+                        <b>Publicated:</b> <p th:text="${book.getYearOfPublication()}"></p>
+                        <div th:if="${!isDescEmpty}">
+                            <b>Description:</b><p th:text="${book.getDescription()}"></p>
+                        </div>
+                        <div class="form-group">
+                            <label><b>Available copies:</b></label>
+                            <input type="quantiy" th:placeholder="${copies}" class="form-control quantity">
+                        </div>
+                        <form th:action="@{/rentals}" method="post" th:object="${book}">
+                            <input type="hidden" th:field="*{id}">
+                            <p style="margin-top: 30px">
+                                <button th:disabled="${copies < 1}" class="btn btn-round btn-danger" type="submit"><i class="fa fa-shopping-cart"></i>Rent a book</button>
+                            </p>
+                        </form>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+</body>
+</html>

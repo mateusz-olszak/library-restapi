@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="header :: page_head('Library')"></head>
+<body>
+<header th:replace="header :: header"></header>
+<main>
+    <div style="text-align: center; margin-top: 50px;" sec:authorize="hasAuthority('Admin')">
+        <a th:href="@{/books/new}">New Book</a>
+    </div>
+    <form th:action="@{/books/1}" style="text-align: center;margin-top: 50px;">
+        <input type="search" name="keyword" th:value="${keyword}" style="border-radius: 5px;" placeholder="Filter books" required>
+        <input class="btn btn-primary" type="submit" value="Search">
+        <input class="btn btn-secondary" type="button" value="Clear" onclick="clearFilter()">
+    </form>
+    <div align="center" style="margin-top: 50px; padding: 15px;">
+        <table class="table">
+            <tbody>
+            <tr th:if="${books.size() > 0}" th:each="book: ${books}">
+                <th scope="row">
+                    <img th:if="${book.photo != null}" th:src="@{${book.bookThumbnail}}">
+                    <span th:unless="${book.photo != null}" class="far fa-book fa-2x"></span>
+                </th>
+                <td th:text="${book.getTitle()}"></td>
+                <td th:text="${book.getAuthor()}"></td>
+                <td th:text="${book.getYearOfPublication()}"></td>
+                <td>
+                    <a th:href="@{'/books/view/' + ${book.getId()}}">view</a> &nbsp;
+                    <a th:href="@{'/books/edit/' + ${book.getId()}}" sec:authorize="hasAuthority('Admin')">edit</a> &nbsp;
+                    <a th:href="@{'/books/delete/' + ${book.getId()}}" sec:authorize="hasAuthority('Admin')">delete</a>
+                </td>
+            </tr>
+            <span th:unless="${books.size() > 0}">No books found</span>
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation example" style="margin-right: 50px;">
+        <ul th:if="${totalElements > 5}" class="pagination justify-content-center">
+            <span style="margin-top: 10px;">Page [[${currentPage}]] of [[${totalPages}]] &nbsp;&nbsp;</span>
+            <li class="page-item">
+                <a th:if="${currentPage > 1}" class="page-link" th:href="@{'/books/' + ${currentPage - 1}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i: ${#numbers.sequence(1,totalPages)}">
+                <a class="page-link" th:href="@{'/books/' + ${i} + ${keyword == null ? '' : '?keyword=' + keyword}}">[[${i}]]</a>
+            </li>
+            <li class="page-item">
+                <a th:if="${currentPage < totalPages}" class="page-link" th:href="@{'/books/' + ${currentPage + 1}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</main>
+<script type="text/javascript">
+    $(document).ready(function () {
+       $("#logoutLink").on("click", function (e) {
+           e.preventDefault();
+           document.logoutForm.submit();
+       });
+    });
+</script>
+</body>
+</html>

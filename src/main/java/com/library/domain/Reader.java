@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "READERS")
@@ -22,11 +24,12 @@ public class Reader {
     @Column(name = "READER_ID")
     private int id;
 
-    @Column(name = "FIRST_NAME")
-    private String firstName;
+    @Column(name = "EMAIL", length = 50, unique = true)
+    @NotNull
+    private String email;
 
-    @Column(name = "LAST_NAME")
-    private String lastName;
+    @Column(name = "PASSWORD")
+    private String password;
 
     @Column(name = "CREATED")
     private Date created;
@@ -39,9 +42,21 @@ public class Reader {
     )
     private List<Rental> rental;
 
-    public Reader(String firstName, String lastName, Date created) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USERS_ROLES",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    public Reader(String email, String password, Date created) {
+        this.email = email;
+        this.password = password;
         this.created = created;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 }

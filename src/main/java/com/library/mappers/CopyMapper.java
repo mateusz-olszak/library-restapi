@@ -25,7 +25,7 @@ public class CopyMapper {
         );
     }
 
-    public CopyDto maptoCopyDto(final Copy copy){
+    public CopyDto mapToCopyDto(final Copy copy){
         return new CopyDto(
                 copy.getId(),
                 copy.getBook().getId(),
@@ -35,8 +35,7 @@ public class CopyMapper {
 
     public List<CopyDto> mapToListCopyDto(final List<Copy> copies){
         return copies.stream()
-                .map(this::maptoCopyDto)
+                .map(this::mapToCopyDto)
                 .collect(Collectors.toList());
     }
-
 }

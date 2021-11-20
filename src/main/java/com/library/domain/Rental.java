@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "RENTALS")
@@ -23,11 +22,11 @@ public class Rental {
     @Column(name = "RENTAL_ID")
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "COPY_ID")
     private Copy copy;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "READER_ID")
     private Reader reader;
 
@@ -48,5 +47,10 @@ public class Rental {
         this.rentedFrom = rentedFrom;
         this.rentedTo = rentedTo;
         this.completed = completed;
+    }
+
+    public Rental(Copy copy, Reader reader) {
+        this.copy = copy;
+        this.reader = reader;
     }
 }

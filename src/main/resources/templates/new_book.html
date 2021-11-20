@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="header :: page_head('Library - New Book')"></head>
+<body>
+<header th:replace="header :: header"></header>
+<main>
+    <form class="newBookForm" th:action="@{/books/new}" method="post" th:object="${book}" enctype="multipart/form-data">
+        <label>
+            <p class="label-txt">ENTER BOOK TITLE</p>
+            <input type="text" class="input" maxlength="50" required th:field="*{title}">
+            <div class="line-box">
+                <div class="line"></div>
+            </div>
+        </label>
+        <label>
+            <p class="label-txt">ENTER BOOK AUTHOR</p>
+            <input type="text" class="input"  maxlength="50" required th:field="*{author}">
+            <div class="line-box">
+                <div class="line"></div>
+            </div>
+        </label>
+        <label>
+            <p class="label-txt">ENTER BOOK DESCRIPTION</p>
+            <textarea type="text" class="input"  maxlength="50" th:field="*{description}"></textarea>
+            <div class="line-box">
+                <div class="line"></div>
+            </div>
+        </label>
+        <label>
+            <p class="label-txt">ENTER BOOK YEAR OF PUBLICATION</p>
+            <input type="number" class="input" required th:field="*{yearOfPublication}" min="0">
+            <div class="line-box">
+                <div class="line"></div>
+            </div>
+        </label>
+        <label>
+            <p class="label-txt">ENTER BOOK AVAILABLE COPIES</p>
+                <input type="number" class="input" required th:field="*{copies}" min="0" max="15">
+            <div class="line-box">
+                <div class="line"></div>
+            </div>
+        </label>
+        <label>
+            <p class="label-txt">ENTER BOOK THUMBNAIL</p>
+            <input type="file" id="fileImage" name="image" accept="image/png, image/jpeg" class="fileInput mb-2">
+            <img id="thumbnail" alt="Photos preview" th:src="@{/images/default-book.png}" class="img-fluid">
+        </label>
+        <button type="submit">submit</button>
+    </form>
+</main>
+</body>
+</html>

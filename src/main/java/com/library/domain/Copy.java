@@ -8,20 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@NamedQueries({
-        @NamedQuery(
-                name = "Copy.retrieveAvailableCopiesForGivenId",
-                query = "FROM Copy WHERE status = 'AVAILABLE' AND book.id = :id"
-        ),
-        @NamedQuery(
-                name = "Copy.retrieveCopiesWithGivenTitle",
-                query = "FROM Copy WHERE book.title = :title"
-        ),
-        @NamedQuery(
-                name = "Copy.retrieveCopiesForGivenBook",
-                query = "FROM Copy WHERE book.id = :id"
-        )
-})
 @Entity
 @Table(name = "COPIES")
 @Data
@@ -35,7 +21,7 @@ public class Copy {
     @Column(name = "COPY_ID")
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "BOOK_ID")
     private Book book;
 
