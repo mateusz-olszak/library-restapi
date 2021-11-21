@@ -111,18 +111,16 @@ public class BookController {
             return "redirect:/books";
         } else {
             BookDto bookDto = new BookDto(title, author, yearOfPublication, description);
-            Book book = bookMapper.mapToBook(bookDto);
+            Book book = bookService.saveBook(bookMapper.mapToBook(bookDto));
             if (copies > 0) {
                 for (int i=0; i<copies; i++) {
                     copyService.saveCopy(new Copy(book, Status.AVAILABLE));
                 }
             }
-            bookService.saveBook(book);
             return "redirect:/books";
         }
     }
 
-    // EDIT BOOK
     @GetMapping("/books/edit/{id}")
     String editBook(@PathVariable("id") int id, Model model) throws ElementNotFoundException {
         Book book = bookService.findBook(id);

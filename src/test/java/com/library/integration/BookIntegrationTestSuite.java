@@ -2,8 +2,12 @@ package com.library.integration;
 
 import com.library.dao.BookRepository;
 import com.library.dao.CopyRepository;
+import com.library.dao.ReaderRepository;
+import com.library.dao.RentalRepository;
 import com.library.domain.Book;
 import com.library.domain.Copy;
+import com.library.domain.Reader;
+import com.library.domain.Rental;
 import com.library.exceptions.ElementNotFoundException;
 import com.library.status.Status;
 import org.junit.jupiter.api.Test;
@@ -13,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -26,6 +32,10 @@ public class BookIntegrationTestSuite {
     private BookRepository bookRepository;
     @Autowired
     private CopyRepository copyRepository;
+    @Autowired
+    private ReaderRepository readerRepository;
+    @Autowired
+    private RentalRepository rentalRepository;
 
     @Test
     void testCreateBook() {
@@ -125,5 +135,31 @@ public class BookIntegrationTestSuite {
         bookRepository.deleteById(savedBook4.getId());
         bookRepository.deleteById(savedBook5.getId());
         bookRepository.deleteById(savedBook6.getId());
+    }
+
+    @Test
+    void testDeleteBook_copyAndRentalShouldBeDeleted() {
+        // Given
+        Reader reader = new Reader("John", "Smith", new Date());
+        Reader savedReader = readerRepository.save(reader);
+        Book book = new Book("BookTitle1","BookDesc1",1950);
+        Book savedBook = bookRepository.save(book);
+        Copy copy = new Copy(book, Status.AVAILABLE);
+        Copy savedCopy = copyRepository.save(copy);
+        Rental rental = new Rental(copy,reader, LocalDate.now(),LocalDate.now().plusDays(7),Status.IN_USE);
+        Rental savedRental = rentalRepository.save(rental);
+        // When
+        bookRepository.deleteById(savedBook.getId());
+        // Then
+        boolean bookExists = bookRepository.existsById(savedBook.getId());
+        boolean copyExists = copyRepository.existsById(copy.getId());
+        boolean readerExists = readerRepository.existsById(savedReader.getId());
+        boolean rentalExists = rentalRepository.existsById(savedRental.getId());
+        assertThat(bookExists).isEqualTo(false);
+        assertThat(copyExists).isEqualTo(false);
+        assertThat(rentalExists).isEqualTo(false);
+        assertThat(readerExists).isEqualTo(true);
+        // Cleanup
+        readerRepository.deleteById(savedReader.getId());
     }
 }

@@ -188,7 +188,6 @@ public class ReaderIntegrationTestSuite {
         assertThat(copyExists).isEqualTo(true);
         assertThat(bookExists).isEqualTo(true);
         // Cleanup
-        copyRepository.deleteById(savedCopy.getId());
         bookRepository.deleteById(savedBook.getId());
     }
 }

@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "READERS")
@@ -40,7 +37,7 @@ public class Reader {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<Rental> rental;
+    private List<Rental> rentals = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

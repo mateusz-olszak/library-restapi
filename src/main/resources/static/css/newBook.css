@@ -83,3 +83,29 @@ button:hover {
     height: 75px;
     width: 75px;
 }
+
+/* RESPONSIVE */
+
+@media only screen and (max-width: 765px) {
+    .newBookForm {
+        width: 100%;
+        margin: 60px auto;
+        background: #ffffff;
+        padding: 60px 120px 80px 120px;
+        text-align: center;
+        -webkit-box-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+        box-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+    }
+    .input {
+        width: 100%;
+        padding: 30px;
+        background: transparent;
+        border: none;
+        outline: none;
+    }
+
+    #thumbnail {
+        height: 105px;
+        width: 105px;
+    }
+}

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "COPIES")
@@ -29,6 +30,14 @@ public class Copy {
     @Column(name = "STATUS")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @OneToMany(
+            targetEntity = Rental.class,
+            mappedBy = "copy",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Rental> rental;
 
     public Copy(Book book, Status status) {
         this.book = book;

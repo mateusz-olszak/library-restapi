@@ -22,11 +22,11 @@ public class Rental {
     @Column(name = "RENTAL_ID")
     private int id;
 
-    @OneToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "COPY_ID")
     private Copy copy;
 
-    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToOne
     @JoinColumn(name = "READER_ID")
     private Reader reader;
 
