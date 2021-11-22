@@ -10,7 +10,7 @@ import com.library.service.BookService;
 import com.library.service.CopyService;
 import com.library.service.FileUploadService;
 import com.library.status.Status;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -28,14 +28,14 @@ import java.util.Objects;
 import static com.library.service.BookService.BOOKS_PER_PAGE;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class BookController {
 
-    private BookService bookService;
-    private BookMapper bookMapper;
-    private FileUploadService fileUploadService;
-    private CopyService copyService;
+    private final BookService bookService;
+    private final BookMapper bookMapper;
+    private final FileUploadService fileUploadService;
+    private final CopyService copyService;
 
     @GetMapping("/")
     String redirectToHomePage(Model model) {
