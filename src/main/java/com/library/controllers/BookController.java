@@ -136,33 +136,19 @@ public class BookController {
             @RequestParam("image") MultipartFile multipartFile
     ) throws ElementNotFoundException
     {
-        System.out.println(bookDto);
         log.info("Preparing to update the book.");
         if  (!multipartFile.isEmpty()){
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             bookDto.setPhoto(fileName);
             Book book = bookService.updateBook(bookDto);
-            int bookId = book.getId();
-            copyService.deleteAllCopiesMatchingBookId(bookId);
-            if (bookDto.getCopies() > 0) {
-                for (int i=0; i<bookDto.getCopies(); i++) {
-                    copyService.saveCopy(new Copy(book, Status.AVAILABLE));
-                }
-            }
+            copyService.updateAmountOfCopies(book, bookDto.getCopies());
             String uploadDir = "book-thumbnails/" + book.getId();
-
             fileUploadService.saveFile(uploadDir,fileName,multipartFile);
             log.info("Saving book with new image");
         } else {
             log.info("book with the same image is about to be saved, book id: " + bookDto.getId());
             Book book = bookService.updateBook(bookDto);
-            int bookId = book.getId();
-            copyService.deleteAllCopiesMatchingBookId(bookId);
-            if (bookDto.getCopies() > 0) {
-                for (int i=0; i<bookDto.getCopies(); i++) {
-                    copyService.saveCopy(new Copy(book, Status.AVAILABLE));
-                }
-            }
+            copyService.updateAmountOfCopies(book, bookDto.getCopies());
         }
         redirectAttributes.addFlashAttribute("message", "The book has been updated successfully.");
         return "redirect:/books";

@@ -1,6 +1,7 @@
 package com.library.service;
 
 import com.library.dao.CopyRepository;
+import com.library.domain.Book;
 import com.library.domain.Copy;
 import com.library.exceptions.ElementNotFoundException;
 import com.library.status.Status;
@@ -30,10 +31,6 @@ public class CopyService {
         copyRepository.deleteById(id);
     }
 
-    public void deleteAllCopiesMatchingBookId(int id) {
-        copyRepository.deleteAllByBook_Id(id);
-    }
-
     public Copy findCopy(int id) throws ElementNotFoundException {
         return copyRepository.findById(id).orElseThrow(ElementNotFoundException::new);
     }
@@ -46,6 +43,10 @@ public class CopyService {
         return Math.toIntExact(copyRepository.findCopiesByBook_Id(id).stream().map(Copy::getId).mapToInt(Integer::intValue).count());
     }
 
+    public int getAmountOfCopiesForBookId(int id) {
+        return copyRepository.findCopiesByBook_Id(id).size();
+    }
+
     public List<Copy> retrieveAvailableCopiesForGivenId(int id){
         return copyRepository.findCopiesByStatusAndAndBook_Id(Status.AVAILABLE,id);
     }
@@ -54,5 +55,21 @@ public class CopyService {
         Copy copy = copyRepository.findById(id).orElseThrow(ElementNotFoundException::new);
         copy.setStatus(status);
         return copyRepository.save(copy);
+    }
+
+    public void updateAmountOfCopies(Book book, int amountOfCopies) {
+        int bookId = book.getId();
+        int copies = getAmountOfCopiesForBookId(bookId);
+        int result;
+        if (copies > amountOfCopies) {
+            result = copies - amountOfCopies;
+        } else {
+            result = amountOfCopies - copies;
+        }
+        if (result > 0) {
+            for (int i = 0; i< result; i++) {
+                copyRepository.save(new Copy(book, Status.AVAILABLE));
+            }
+        }
     }
 }
