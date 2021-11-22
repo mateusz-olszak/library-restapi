@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +37,11 @@ public class BookController {
     private FileUploadService fileUploadService;
     private CopyService copyService;
 
+    @GetMapping("/")
+    String redirectToHomePage(Model model) {
+        return viewHomePage(model);
+    }
+
     @GetMapping("/books")
     String viewHomePage(Model model){
         return listByPageBooks(1, null, model);
@@ -48,9 +54,9 @@ public class BookController {
             Model model
     ) {
         Page<Book> pageBooks = bookService.findAllBooks(page, keyword);
-        List<BookDto> books = bookMapper.mapToListBookDto(pageBooks.getContent());
+        List<BookDto> books = new ArrayList<>(bookMapper.mapToListBookDto(pageBooks.getContent()));
         int totalPages = pageBooks.getTotalPages();
-        long startCount = (page-1) * BOOKS_PER_PAGE + 1;
+        long startCount = (long) (page - 1) * BOOKS_PER_PAGE + 1;
         long endCount = startCount + BOOKS_PER_PAGE - 1;
         if (endCount > pageBooks.getTotalElements()) {
             endCount = pageBooks.getTotalElements();
@@ -79,7 +85,6 @@ public class BookController {
         return "view_book";
     }
 
-    // NEW BOOK
     @GetMapping("/books/new")
     String getNewBookTemplate(Model model){
         BookDto bookDto = new BookDto();
