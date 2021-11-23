@@ -4,7 +4,6 @@ import com.library.dao.ReaderRepository;
 import com.library.dao.RoleRepository;
 import com.library.domain.Reader;
 import com.library.domain.Role;
-import com.library.exceptions.ElementNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,15 +17,19 @@ public class ReaderService {
     private PasswordEncoder passwordEncoder;
 
     public Reader saveReader(final Reader reader){
-        String roleName = "Reader";
-        Role role = roleRepository.findByRoleName(roleName);
-        reader.addRole(role);
-        encodePassword(reader);
-        return readerRepository.save(reader);
-    }
-
-    public Reader findReaderById(final int id) throws ElementNotFoundException {
-        return readerRepository.findById(id).orElseThrow(ElementNotFoundException::new);
+        String readerRole = "Reader";
+        String adminRole = "Admin";
+        if (reader.getEmail().equals("admin@gmail.com")){
+            Role role = roleRepository.findByRoleName(adminRole);
+            reader.addRole(role);
+            encodePassword(reader);
+            return readerRepository.save(reader);
+        } else {
+            Role role = roleRepository.findByRoleName(readerRole);
+            reader.addRole(role);
+            encodePassword(reader);
+            return readerRepository.save(reader);
+        }
     }
 
     public void deleteReader(final int id){
