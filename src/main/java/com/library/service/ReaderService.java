@@ -18,18 +18,10 @@ public class ReaderService {
 
     public Reader saveReader(final Reader reader){
         String readerRole = "Reader";
-        String adminRole = "Admin";
-        if (reader.getEmail().equals("admin@gmail.com")){
-            Role role = roleRepository.findByRoleName(adminRole);
-            reader.addRole(role);
-            encodePassword(reader);
-            return readerRepository.save(reader);
-        } else {
-            Role role = roleRepository.findByRoleName(readerRole);
-            reader.addRole(role);
-            encodePassword(reader);
-            return readerRepository.save(reader);
-        }
+        Role role = roleRepository.findByRoleName(readerRole);
+        reader.addRole(role);
+        encodePassword(reader);
+        return readerRepository.save(reader);
     }
 
     public void deleteReader(final int id){
