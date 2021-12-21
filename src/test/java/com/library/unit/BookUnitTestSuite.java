@@ -2,7 +2,8 @@ package com.library.unit;
 
 import com.library.dao.BookRepository;
 import com.library.domain.Book;
-import com.library.dto.BookDto;
+import com.library.dto.books.BookDto;
+import com.library.dto.googleapi.GoogleVolumeInfoDto;
 import com.library.service.BookService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +33,7 @@ public class BookUnitTestSuite {
     void testUpdateBook() {
         // Given
         Book book = new Book("BookTitle","BookAuthor",1948);
-        BookDto bookDto = new BookDto("Title","Author",1950,"Description");
+        BookDto bookDto = new BookDto("Title","Author",1950,"Description",22,"PLN",new GoogleVolumeInfoDto());
         // When
         when(bookRepository.findById(anyInt())).thenReturn(Optional.of(book));
         when(bookRepository.save(any())).thenReturn(book);

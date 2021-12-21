@@ -2,9 +2,9 @@ package com.library.service;
 
 import com.library.dao.BookRepository;
 import com.library.domain.Book;
-import com.library.dto.BookDto;
+import com.library.dto.books.BookDto;
 import com.library.exceptions.ElementNotFoundException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,13 +12,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class BookService {
 
     public static final int BOOKS_PER_PAGE = 5;
 
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     public Book saveBook(final Book book){
         return bookRepository.save(book);

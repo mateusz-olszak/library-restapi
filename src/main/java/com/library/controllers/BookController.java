@@ -2,8 +2,9 @@ package com.library.controllers;
 
 import com.library.domain.Book;
 import com.library.domain.Copy;
-import com.library.dto.BookDto;
-import com.library.dto.RentalDto;
+import com.library.dto.books.BookDto;
+import com.library.dto.books.RentalDto;
+import com.library.dto.googleapi.GoogleVolumeInfoDto;
 import com.library.exceptions.ElementNotFoundException;
 import com.library.mappers.BookMapper;
 import com.library.service.BookService;
@@ -99,11 +100,13 @@ public class BookController {
             @RequestParam("yearOfPublication") int yearOfPublication,
             @RequestParam("copies") int copies,
             @RequestParam("description") String description,
+            @RequestParam("price") double price,
+            @RequestParam("currency") String currency,
             @RequestParam("image") MultipartFile multipartFile
     ) {
         if (!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-            BookDto bookDto = new BookDto(fileName,title,author,yearOfPublication,description);
+            BookDto bookDto = new BookDto(fileName,title,author,yearOfPublication,description,price,currency,new GoogleVolumeInfoDto());
             Book book = bookService.saveBook(bookMapper.mapToBook(bookDto));
             if (copies > 0) {
                 for (int i=0; i<copies; i++) {
@@ -115,7 +118,7 @@ public class BookController {
 
             return "redirect:/books";
         } else {
-            BookDto bookDto = new BookDto(title, author, yearOfPublication, description);
+            BookDto bookDto = new BookDto(title, author, yearOfPublication, description, price, currency, new GoogleVolumeInfoDto());
             Book book = bookService.saveBook(bookMapper.mapToBook(bookDto));
             if (copies > 0) {
                 for (int i=0; i<copies; i++) {

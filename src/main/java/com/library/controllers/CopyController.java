@@ -1,7 +1,7 @@
 package com.library.controllers;
 
 import com.library.domain.Copy;
-import com.library.dto.CopyDto;
+import com.library.dto.books.CopyDto;
 import com.library.exceptions.ElementNotFoundException;
 import com.library.mappers.CopyMapper;
 import com.library.service.CopyService;

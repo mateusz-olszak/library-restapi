@@ -2,7 +2,7 @@ package com.library.controllers;
 
 import com.library.config.CustomAuthenticationSuccessHandler;
 import com.library.domain.Reader;
-import com.library.dto.ReaderDto;
+import com.library.dto.books.ReaderDto;
 import com.library.mappers.ReaderMapper;
 import com.library.service.ReaderService;
 import lombok.AllArgsConstructor;

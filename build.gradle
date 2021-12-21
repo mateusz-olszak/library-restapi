@@ -40,6 +40,10 @@ dependencies {
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.12.4'
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.5.6'
+    testImplementation 'com.google.code.gson:gson'
+    implementation 'com.google.code.gson:gson'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.6.0'
+    implementation group: 'com.google.cloud', name: 'google-cloud-storage', version: '2.2.2'
 }
 
 test {

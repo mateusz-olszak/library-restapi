@@ -18,6 +18,22 @@
                         <div th:if="${!isDescEmpty}">
                             <b>Description:</b><p th:text="${book.getDescription()}"></p>
                         </div>
+                        <div th:if="${book.getGoogleVolumeInfoDto().getAverageRating() > 0}" class="form-group">
+                            <span><b>Book rating according to Google readers:</b></span><br>
+                            <span th:text="'Average rating is: ' + ${book.getGoogleVolumeInfoDto().getAverageRating()} + ' out of ' + ${book.getGoogleVolumeInfoDto().getRatingsCount()} + ' ratings count.'"></span>
+                        </div>
+                        <div th:if="${book.getPrice() > 0}" class="form-group">
+                            <span><b>Book price</b></span><br>
+                            <span id="price" th:text="${book.getPrice()}"></span>
+                            <select id="currency">
+                                <option value="PLN" name="currencyTo" th:text="PLN" th:selected="${book.getCurrency() == 'PLN'}"></option>
+                                <option value="GBP" name="currencyTo" th:text="GBP" th:selected="${book.getCurrency() == 'GBP'}"></option>
+                                <option value="EUR" name="currencyTo" th:text="EUR" th:selected="${book.getCurrency() == 'EUR'}"></option>
+                                <option value="USD" name="currencyTo" th:text="USD" th:selected="${book.getCurrency() == 'USD'}"></option>
+                                <option value="MXN" name="currencyTo" th:text="MXN" th:selected="${book.getCurrency() == 'MXN'}"></option>
+                                <input type="text" id="baseCurrency" hidden th:value="${book.getCurrency()}">
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label><b>Available copies:</b></label>
                             <input type="quantiy" th:placeholder="${copies}" class="form-control quantity">
@@ -33,5 +49,26 @@
         </div>
     </div>
 </main>
+<script>
+var currency = document.querySelector("#currency");
+var currencyFrom = currency.options[currency.selectedIndex].value;
+var baseCurrency = document.querySelector("#baseCurrency").value;
+var amount = document.querySelector("#price").textContent;
+
+currency.addEventListener('change', (event) => {
+    event.preventDefault();
+    $.ajax({
+        url:  "http://localhost:8080/v1/exchange/currency?from=" + baseCurrency + "&to=" + currency.value + "&amount=" + amount,
+        method: 'GET',
+        contentType: 'application/json',
+        success: [
+            function (newAmount) {
+                document.querySelector("#price").textContent = newAmount;
+            }
+        ]
+    });
+    currencyFrom = currency.options[currency.selectedIndex].value;
+}, false);
+</script>
 </body>
 </html>

@@ -44,6 +44,12 @@ public class Book {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @Column(name = "PRICE")
+    private Double price;
+
+    @Column(name = "CURRENCY")
+    private String currency;
+
     @OneToMany(
             targetEntity = Copy.class,
             mappedBy = "book",
@@ -58,12 +64,14 @@ public class Book {
         this.yearOfPublication = yearOfPublication;
     }
 
-    public Book(String photo, String title, String author, int yearOfPublication, String description) {
+    public Book(String photo, String title, String author, int yearOfPublication, String description, double price, String currency) {
         this.photo = photo;
         this.title = title;
         this.author = author;
         this.yearOfPublication = yearOfPublication;
         this.description = description;
+        this.price = price;
+        this.currency = currency;
     }
 
     public String getBookThumbnail() {

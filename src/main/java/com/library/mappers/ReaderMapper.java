@@ -1,7 +1,7 @@
 package com.library.mappers;
 
 import com.library.domain.Reader;
-import com.library.dto.ReaderDto;
+import com.library.dto.books.ReaderDto;
 import org.springframework.stereotype.Service;
 
 @Service

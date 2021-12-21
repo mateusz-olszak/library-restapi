@@ -1,4 +1,4 @@
-package com.library.dto;
+package com.library.dto.books;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

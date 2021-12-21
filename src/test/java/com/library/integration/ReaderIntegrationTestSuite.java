@@ -190,4 +190,20 @@ public class ReaderIntegrationTestSuite {
         // Cleanup
         bookRepository.deleteById(savedBook.getId());
     }
+
+    @Test
+    void testCreateAdmin() {
+        String password = "123";
+        String encodedPass = passwordEncoder.encode(password);
+        System.out.println(encodedPass);
+        System.out.println(new Date());
+        assertThat(passwordEncoder.matches(password,"$2a$10$az9qwhPq6cAcS9nwdP1cnub43ovfpeER8j7/v8GISurT5sYIND0oi")).isEqualTo(true);
+    }
+
+    @Test
+    void testEncodePassword() {
+        String password = "admin";
+        String encodedPass = passwordEncoder.encode(password);
+        System.out.println(encodedPass);
+    }
 }

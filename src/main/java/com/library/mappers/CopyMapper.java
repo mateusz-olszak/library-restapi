@@ -2,7 +2,7 @@ package com.library.mappers;
 
 import com.library.domain.Book;
 import com.library.domain.Copy;
-import com.library.dto.CopyDto;
+import com.library.dto.books.CopyDto;
 import com.library.exceptions.ElementNotFoundException;
 import com.library.service.BookService;
 import lombok.AllArgsConstructor;
