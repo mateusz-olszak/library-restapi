@@ -1,23 +1,28 @@
 package com.library.controllers;
 
-import com.library.service.ReaderService;
-import lombok.AllArgsConstructor;
+import com.library.service.facade.ReaderFacade;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class ReaderRestController {
 
-    private ReaderService readerService;
+    private final ReaderFacade readerFacade;
 
     @PostMapping("/readers/register/check_email")
     public String checkDuplicateEmail(@Param("email") String email) {
-        log.info("Check if email already exist method activated");
-        return readerService.isEmailUnique(email) ? "OK" : "Duplicated";
+        return readerFacade.checkDuplicateEmail(email);
     }
 
+    @DeleteMapping("/readers/delete/{id}")
+    void deleteReader(@PathVariable int id){
+        readerFacade.deleteReader(id);
+    }
 }

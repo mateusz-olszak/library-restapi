@@ -7,6 +7,7 @@ import com.library.exceptions.ElementNotFoundException;
 import com.library.exceptions.NoBooksAvailableException;
 import com.library.status.Status;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@EnableAspectJAutoProxy
 public class RentalService {
 
     private RentalRepository rentalRepository;

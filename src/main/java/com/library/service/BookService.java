@@ -6,14 +6,17 @@ import com.library.dto.books.BookDto;
 import com.library.exceptions.ElementNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@EnableAspectJAutoProxy
 public class BookService {
 
     public static final int BOOKS_PER_PAGE = 5;
@@ -28,7 +31,7 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
-    public Book findBook(final int id) throws ElementNotFoundException {
+    public Book findBook(final int id) {
         return bookRepository.findById(id).orElseThrow(ElementNotFoundException::new);
     }
 
@@ -40,14 +43,15 @@ public class BookService {
         return bookRepository.findAll(pageable);
     }
 
-    public Book updateBook(BookDto bookDto) throws ElementNotFoundException {
-        log.info("Preparing to update book");
+    public Book updateBook(BookDto bookDto) {
         Book book = bookRepository.findById(bookDto.getId()).orElseThrow(ElementNotFoundException::new);
         book.setAuthor(bookDto.getAuthor());
         book.setTitle(bookDto.getTitle());
         book.setDescription(bookDto.getDescription());
         book.setYearOfPublication(bookDto.getYearOfPublication());
-        book.setPhoto(bookDto.getPhoto());
+        book.setPrice(bookDto.getPrice());
+        book.setCurrency(bookDto.getCurrency());
+        book.setPhoto(bookDto.getPhoto().isEmpty() ? null : bookDto.getPhoto());
         return bookRepository.save(book);
     }
 }

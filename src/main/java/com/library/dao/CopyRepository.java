@@ -20,5 +20,7 @@ public interface CopyRepository extends CrudRepository<Copy, Integer> {
 
     List<Copy> findCopiesByStatusAndAndBook_Id(Status status, int id);
 
-    void deleteAllByBook_Id(int id);
+    List<Copy> findAllByStatus(Status status);
+
+    void deleteAllByBook_IdAndStatus(int id, Status status);
 }

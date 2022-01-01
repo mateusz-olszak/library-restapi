@@ -17,7 +17,7 @@
             <tbody>
             <tr th:if="${rentals.size() > 0}" th:each="rental: ${rentals}">
                 <th scope="row">
-                    <img th:if="${rental.getCopy().getBook().getPhoto() != null}" th:src="@{${rental.getCopy().getBook().getBookThumbnail()}}">
+                    <img th:if="${rental.getCopy().getBook().getPhoto() != null}" th:src="@{${rental.getCopy().getBook().getPhoto()}}">
                     <span th:unless="${rental.getCopy().getBook().getPhoto() != null}" class="far fa-book fa-2x"></span>
                 </th>
                 <td th:text="${rental.getCopy().getBook().getTitle()}"></td>

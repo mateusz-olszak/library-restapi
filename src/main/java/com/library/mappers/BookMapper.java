@@ -20,15 +20,14 @@ public class BookMapper {
     private final BookRatingsClient bookRatingsClient;
 
     public Book mapToBook(final BookDto bookDto){
-        return new Book(
-                bookDto.getPhoto(),
-                bookDto.getTitle(),
-                bookDto.getAuthor(),
-                bookDto.getYearOfPublication(),
-                bookDto.getDescription(),
-                bookDto.getPrice(),
-                bookDto.getCurrency()
-        );
+        return Book.builder()
+                .title(bookDto.getTitle())
+                .author(bookDto.getAuthor())
+                .yearOfPublication(bookDto.getYearOfPublication())
+                .description(bookDto.getDescription())
+                .price(bookDto.getPrice())
+                .currency(bookDto.getCurrency())
+                .photo(bookDto.getPhoto().isEmpty() ? null : bookDto.getPhoto()).build();
     }
 
     public BookDto mapToBookDto(final Book book){
@@ -37,18 +36,17 @@ public class BookMapper {
                 .map(GoogleItemDto::getGoogleVolumeInfoDtos)
                 .filter(p -> p.getTitle().equalsIgnoreCase(book.getTitle()))
                 .findFirst().orElse(new GoogleVolumeInfoDto());
-        return new BookDto(
-                book.getId(),
-                book.getTitle(),
-                book.getAuthor(),
-                book.getDescription(),
-                book.getPrice(),
-                book.getCurrency(),
-                book.getYearOfPublication(),
-                googleVolumeInfoDto,
-                copies,
-                book.getPhoto()
-        );
+        return BookDto.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .description(book.getDescription())
+                .price(book.getPrice())
+                .currency(book.getCurrency())
+                .yearOfPublication(book.getYearOfPublication())
+                .googleVolumeInfoDto(googleVolumeInfoDto)
+                .copies(copies)
+                .photo(book.getPhoto()).build();
     }
 
     public List<BookDto> mapToListBookDto(final List<Book> books){

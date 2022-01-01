@@ -68,10 +68,11 @@
                 </div>
             </label>
             <label>
-                <p class="label-txt">BOOK THUMBNAIL</p>
-                <input type="file" id="fileImage" name="image" accept="image/png, image/jpeg" class="fileInput mb-2">
-                <img th:if="${book.photo != null}" th:id="${book.photo != null ? 'thumbnail' : ''}" alt="Photos preview" th:src="@{${book.bookThumbnail}}" class="img-fluid">
-                <img th:unless="${book.photo != null}" th:id="${book.photo != null ? '' : 'thumbnail'}" alt="Photos preview" th:src="@{/images/default-book.png}" class="img-fluid">
+                <p class="label-txt">ENTER BOOK PHOTO THUMBNAIL URL</p>
+                <input type="text" class="input" th:field="*{photo}">
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
             </label>
             <button type="submit">submit</button>
         </form>

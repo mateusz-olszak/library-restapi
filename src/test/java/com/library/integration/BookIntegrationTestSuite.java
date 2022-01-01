@@ -40,7 +40,7 @@ public class BookIntegrationTestSuite {
     @Test
     void testCreateBook() {
         // Given
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         // When
         Book savedBook = bookRepository.save(book);
         // Then
@@ -52,7 +52,7 @@ public class BookIntegrationTestSuite {
     @Test
     void testRetrieveBook() {
         // Given
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         // When
         Book bookDb = bookRepository.findById(savedBook.getId()).get();
@@ -66,9 +66,9 @@ public class BookIntegrationTestSuite {
     @Test
     void testRetrieveBooks() {
         // Given
-        Book book1 = new Book("BookTitle1","BookDesc1",1950);
-        Book book2 = new Book("BookTitle2","BookDesc2",1951);
-        Book book3 = new Book("BookTitle3","BookDesc3",1952);
+        Book book1 = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
+        Book book2 = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
+        Book book3 = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         bookRepository.save(book1);
         bookRepository.save(book2);
         bookRepository.save(book3);
@@ -85,9 +85,8 @@ public class BookIntegrationTestSuite {
     @Test
     void testDeleteBook_copyShouldBeDeleted() {
         // Given
-        Book book = new Book("BookTitle1","BookDesc1",1950);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Copy copy = new Copy(book, Status.AVAILABLE);
-        book.addCopy(copy);
         Book savedBook = bookRepository.save(book);
         // When
         bookRepository.deleteById(savedBook.getId());
@@ -109,12 +108,12 @@ public class BookIntegrationTestSuite {
     @Test
     void testFindBooksByKeyword() {
         // Given
-        Book book1 = new Book("Harry Potter", "J.K Rowling", 2000);
-        Book book2 = new Book("Harry Potter", "J.K Rowling", 2001);
-        Book book3 = new Book("Harry Potter", "J.K Rowling", 2002);
-        Book book4 = new Book("Harry Potter", "J.K Rowling", 2003);
-        Book book5 = new Book("Harry Potter", "J.K Rowling", 2004);
-        Book book6 = new Book("Harry Potter", "J.K Rowling", 2005);
+        Book book1 = Book.builder().author("J.K. Rowling").title("Harry Potter").description("BookDesc").yearOfPublication(1948).build();
+        Book book2 = Book.builder().author("J.K. Rowling").title("Harry Potter").description("BookDesc").yearOfPublication(1948).build();
+        Book book3 = Book.builder().author("J.K. Rowling").title("Harry Potter").description("BookDesc").yearOfPublication(1948).build();
+        Book book4 = Book.builder().author("J.K. Rowling").title("Harry Potter").description("BookDesc").yearOfPublication(1948).build();
+        Book book5 = Book.builder().author("J.K. Rowling").title("Harry Potter").description("BookDesc").yearOfPublication(1948).build();
+        Book book6 = Book.builder().author("J.K. Rowling").title("Harry Potter").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook1 = bookRepository.save(book1);
         Book savedBook2 = bookRepository.save(book2);
         Book savedBook3 = bookRepository.save(book3);
@@ -142,7 +141,7 @@ public class BookIntegrationTestSuite {
         // Given
         Reader reader = new Reader("John", "Smith", new Date());
         Reader savedReader = readerRepository.save(reader);
-        Book book = new Book("BookTitle1","BookDesc1",1950);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy = new Copy(book, Status.AVAILABLE);
         Copy savedCopy = copyRepository.save(copy);

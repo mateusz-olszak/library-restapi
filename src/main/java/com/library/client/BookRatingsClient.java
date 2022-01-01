@@ -59,7 +59,7 @@ public class BookRatingsClient {
         }
     }
 
-    private Credential getCredentials() throws GeneralSecurityException, IOException {
+    public Credential getCredentials() throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         GoogleCredential credential = new GoogleCredential.Builder()
@@ -72,12 +72,11 @@ public class BookRatingsClient {
         return credential;
     }
 
-    private String getNewToken() throws IOException {
+    public String getNewToken() throws IOException {
         ArrayList<String> scopes = new ArrayList<>();
         scopes.add(clientConfig.getScope());
         TokenResponse tokenResponse = new GoogleRefreshTokenRequest(new NetHttpTransport(), new JacksonFactory(),
                 clientConfig.getRefreshToken(), clientConfig.getClientId(), clientConfig.getClientSecret()).setScopes(scopes).setGrantType("refresh_token").execute();
         return tokenResponse.getAccessToken();
     }
-
 }

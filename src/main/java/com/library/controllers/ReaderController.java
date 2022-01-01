@@ -1,63 +1,43 @@
 package com.library.controllers;
 
-import com.library.config.CustomAuthenticationSuccessHandler;
-import com.library.domain.Reader;
-import com.library.dto.books.ReaderDto;
-import com.library.mappers.ReaderMapper;
-import com.library.service.ReaderService;
-import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.library.service.ModelFillerService;
+import com.library.service.facade.ReaderFacade;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.Date;
+import java.util.Map;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReaderController {
 
-    private ReaderService readerService;
-    private ReaderMapper readerMapper;
+    private final ReaderFacade readerFacade;
+    private final ModelFillerService modelFillerService;
 
     @GetMapping("/readers/login")
-    String viewLoginForm(Model model, Principal principal, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        request.getSession().setAttribute(CustomAuthenticationSuccessHandler.REDIRECT_URL_SESSION_ATTRIBUTE_NAME, referer);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication instanceof AnonymousAuthenticationToken || principal == null) {
-            return "login";
-        }
-        return "redirect:/books";
+    String viewLoginForm(Principal principal, HttpServletRequest request) {
+        return readerFacade.printLoginPage(principal, request);
     }
 
     @GetMapping("/login")
-    String reachLoginPage(Model model, Principal principal, HttpServletRequest request) {
-        return viewLoginForm(model,principal,request);
+    String reachLoginPage(Principal principal, HttpServletRequest request) {
+        return viewLoginForm(principal,request);
     }
 
     @GetMapping("/readers/register")
     String viewRegisterForm(Model model){
-        ReaderDto readerDto = new ReaderDto();
-        model.addAttribute("reader", readerDto);
+        Map<String, Object> modelMap = readerFacade.printRegisterForm();
+        modelFillerService.fullFillModel(model,modelMap);
         return "register";
     }
 
     @RequestMapping("/readers/register/save")
     String registerReader(@RequestParam("email") String email, @RequestParam("password") String password) {
-        ReaderDto readerDto = new ReaderDto(email,password,new Date());
-        Reader reader = readerMapper.mapToReader(readerDto);
-        readerService.saveReader(reader);
+        readerFacade.registerReader(email, password);
         return "redirect:/books";
     }
-
-    @DeleteMapping("/readers/delete/{id}")
-    void deleteReader(@PathVariable int id){
-        readerService.deleteReader(id);
-    }
-
 }

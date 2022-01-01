@@ -1,8 +1,6 @@
 package com.library.controllers;
 
-import com.library.dto.currencies.CurrencyDto;
-import com.library.dto.currencies.CurrencyExchangeDto;
-import com.library.service.CurrencyExchangeService;
+import com.library.service.facade.CurrencyExchangeFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CurrencyExchangeController {
 
-    private final CurrencyExchangeService currencyExchangeService;
+    private final CurrencyExchangeFacade currencyExchangeFacade;
 
     @GetMapping("/v1/exchange/currency")
     public String exchangeCurrency(
@@ -20,20 +18,6 @@ public class CurrencyExchangeController {
             @RequestParam("to") String currencyTo,
             @RequestParam("amount") double amount
     ) {
-        CurrencyExchangeDto currencyExchangeDto = currencyExchangeService.exchangeCurrency(base, currencyTo, amount);
-        switch (currencyTo) {
-            case "PLN":
-                return String.valueOf(currencyExchangeDto.getCurrencies().getPlnD());
-            case "GBP":
-                return String.valueOf(currencyExchangeDto.getCurrencies().getGbp());
-            case "EUR":
-                return String.valueOf(currencyExchangeDto.getCurrencies().getEuro());
-            case "USD":
-                return String.valueOf(currencyExchangeDto.getCurrencies().getUsd());
-            case "MXN":
-                return String.valueOf(currencyExchangeDto.getCurrencies().getMxn());
-            default:
-                return String.valueOf(0);
-        }
+        return currencyExchangeFacade.exchangeCurrency(base, currencyTo, amount);
     }
 }

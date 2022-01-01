@@ -20,7 +20,6 @@ public class CurrencyExchangeClient {
         CurrencyExchangeDto response = restTemplate.getForObject(
             url, CurrencyExchangeDto.class
         );
-
         return response;
     }
 

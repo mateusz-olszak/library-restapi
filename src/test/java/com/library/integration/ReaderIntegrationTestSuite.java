@@ -170,7 +170,7 @@ public class ReaderIntegrationTestSuite {
         String encodedPassword = passwordEncoder.encode(password);
         Reader reader = new Reader(email,encodedPassword,new Date());
         Reader savedReader = readerRepository.save(reader);
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy = new Copy(book, Status.AVAILABLE);
         Copy savedCopy = copyRepository.save(copy);

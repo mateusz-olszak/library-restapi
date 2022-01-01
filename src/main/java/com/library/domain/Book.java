@@ -1,6 +1,7 @@
 package com.library.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Book {
 
     @Id
@@ -56,31 +58,5 @@ public class Book {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<Copy> copy = new ArrayList<>();
-
-    public Book(String title, String author, int yearOfPublication) {
-        this.title = title;
-        this.author = author;
-        this.yearOfPublication = yearOfPublication;
-    }
-
-    public Book(String photo, String title, String author, int yearOfPublication, String description, double price, String currency) {
-        this.photo = photo;
-        this.title = title;
-        this.author = author;
-        this.yearOfPublication = yearOfPublication;
-        this.description = description;
-        this.price = price;
-        this.currency = currency;
-    }
-
-    public String getBookThumbnail() {
-        if (photo == null)
-            return "/images/default-book.png";
-        return "/book-thumbnails/" + this.getId() + "/" + this.photo;
-    }
-
-    public void addCopy(Copy copy) {
-        this.copy.add(copy);
-    }
+    private final List<Copy> copy = new ArrayList<>();
 }

@@ -8,7 +8,9 @@
     <div class="container">
         <div class="col-md-12">
             <section class="panel">
-                <img class="viewImg" th:src="${book.getBookThumbnail()}">
+                <img  style="width: 200px; height: 200px;" th:if="${book.getPhoto() != null && book.getGoogleVolumeInfoDto().getGoogleImageLinksDto() == null}" th:src="${book.getPhoto()}">
+                <img  style="width: 200px; height: 200px;" th:if="${book.getPhoto() == null && book.getGoogleVolumeInfoDto().getGoogleImageLinksDto() != null}" th:src="${book.getGoogleVolumeInfoDto().getGoogleImageLinksDto().getSmallThumbnail()}">
+                <span th:if="${book.getPhoto() == null && book.getGoogleVolumeInfoDto().getGoogleImageLinksDto() == null}" class="far fa-book fa-5x"></span>
             </section>
             <section class="panel">
                 <div class="panel-body">

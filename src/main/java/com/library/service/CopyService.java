@@ -5,16 +5,18 @@ import com.library.domain.Book;
 import com.library.domain.Copy;
 import com.library.exceptions.ElementNotFoundException;
 import com.library.status.Status;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@EnableAspectJAutoProxy
 public class CopyService {
 
-    private CopyRepository copyRepository;
+    private final CopyRepository copyRepository;
 
     public Copy saveCopy(final Copy copy){
         if (!copy.getStatus().equals(Status.AVAILABLE) &&
@@ -31,7 +33,7 @@ public class CopyService {
         copyRepository.deleteById(id);
     }
 
-    public Copy findCopy(int id) throws ElementNotFoundException {
+    public Copy findCopy(int id) {
         return copyRepository.findById(id).orElseThrow(ElementNotFoundException::new);
     }
 
@@ -43,33 +45,31 @@ public class CopyService {
         return Math.toIntExact(copyRepository.findCopiesByBook_Id(id).stream().map(Copy::getId).mapToInt(Integer::intValue).count());
     }
 
-    public int getAmountOfCopiesForBookId(int id) {
-        return copyRepository.findCopiesByBook_Id(id).size();
+    public void deleteCopiesByBookIdAndStatus(int id, Status status) {
+        copyRepository.deleteAllByBook_IdAndStatus(id, status);
     }
 
     public List<Copy> retrieveAvailableCopiesForGivenId(int id){
         return copyRepository.findCopiesByStatusAndAndBook_Id(Status.AVAILABLE,id);
     }
 
-    public Copy changeCopyStatus(int id, Status status) throws ElementNotFoundException {
+    public Copy changeCopyStatus(int id, Status status) {
         Copy copy = copyRepository.findById(id).orElseThrow(ElementNotFoundException::new);
         copy.setStatus(status);
         return copyRepository.save(copy);
     }
 
     public void updateAmountOfCopies(Book book, int amountOfCopies) {
-        int bookId = book.getId();
-        int copies = getAmountOfCopiesForBookId(bookId);
-        int result;
-        if (copies > amountOfCopies) {
-            result = copies - amountOfCopies;
-        } else {
-            result = amountOfCopies - copies;
-        }
-        if (result > 0) {
-            for (int i = 0; i< result; i++) {
-                copyRepository.save(new Copy(book, Status.AVAILABLE));
+        if (amountOfCopies > 0) {
+            int bookId = book.getId();
+            deleteCopiesByBookIdAndStatus(bookId, Status.AVAILABLE);
+            for (int i = 0; i < amountOfCopies; i++) {
+                copyRepository.save(new Copy(book,Status.AVAILABLE));
             }
         }
+    }
+
+    public List<Copy> findAllAvailableBooks(Status status) {
+        return copyRepository.findAllByStatus(status);
     }
 }

@@ -25,16 +25,14 @@ public class CopyIntegrationTestSuite {
     @Test
     void testCreateNewCopy() {
         // Given
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy = new Copy(book, Status.AVAILABLE);
-        book.addCopy(copy);
         // When
         Copy savedCopy = copyRepository.save(copy);
         // Then
         assertThat(savedCopy.getId()).isGreaterThan(0);
         assertThat(savedCopy.getBook()).isNotNull();
-        assertEquals(1,book.getCopy().size());
         // Cleanup
         bookRepository.deleteById(savedBook.getId());
     }
@@ -42,7 +40,7 @@ public class CopyIntegrationTestSuite {
     @Test
     void testRetrieveCopy() {
         // Given
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy = new Copy(book, Status.AVAILABLE);
         Copy savedCopy = copyRepository.save(copy);
@@ -59,7 +57,7 @@ public class CopyIntegrationTestSuite {
     @Test
     void testRetrieveAllCopies() {
         // Given
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy1 = new Copy(book, Status.AVAILABLE);
         Copy copy2 = new Copy(book, Status.AVAILABLE);
@@ -82,7 +80,7 @@ public class CopyIntegrationTestSuite {
     void testRetrieveCopiesMatchingTitle() {
         // Given
         String title = "BookTitle";
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy = new Copy(book, Status.AVAILABLE);
         Copy savedCopy = copyRepository.save(copy);
@@ -99,7 +97,7 @@ public class CopyIntegrationTestSuite {
     @Test
     void testRetrieveCopiesMatchingStatusAndBookId() {
         // Given
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy1 = new Copy(book, Status.AVAILABLE);
         Copy copy2 = new Copy(book, Status.AVAILABLE);
@@ -118,7 +116,7 @@ public class CopyIntegrationTestSuite {
     @Test
     void testRetrieveCopiesForGivenBookId() {
         // Given
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy1 = new Copy(book, Status.AVAILABLE);
         Copy copy2 = new Copy(book, Status.AVAILABLE);
@@ -137,7 +135,7 @@ public class CopyIntegrationTestSuite {
     @Test
     void testRetrieveAvailableCopiesForGivenBook() {
         // Given
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy1 = new Copy(book, Status.AVAILABLE);
         Copy copy2 = new Copy(book, Status.AVAILABLE);
@@ -159,7 +157,7 @@ public class CopyIntegrationTestSuite {
     @Test
     void testDeleteCopy_bookShouldNotBeDeleted() {
         // Given
-        Book book = new Book("BookTitle","BookDesc",1948);
+        Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Book savedBook = bookRepository.save(book);
         Copy copy = new Copy(book, Status.AVAILABLE);
         Copy savedCopy = copyRepository.save(copy);

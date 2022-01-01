@@ -44,6 +44,9 @@ dependencies {
     implementation 'com.google.code.gson:gson'
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.6.0'
     implementation group: 'com.google.cloud', name: 'google-cloud-storage', version: '2.2.2'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.6.1'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 test {
