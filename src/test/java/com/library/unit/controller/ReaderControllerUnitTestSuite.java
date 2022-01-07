@@ -2,7 +2,7 @@ package com.library.unit.controller;
 
 import com.library.controllers.ReaderController;
 import com.library.dto.books.ReaderDto;
-import com.library.service.ModelFillerService;
+import com.library.controllers.ModelFillerService;
 import com.library.service.facade.ReaderFacade;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

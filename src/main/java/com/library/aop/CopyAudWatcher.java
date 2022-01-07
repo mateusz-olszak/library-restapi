@@ -29,40 +29,42 @@ public class CopyAudWatcher {
     @After("execution(* com.library.service.CopyService.saveCopy(..))" +
             "&& args(copy)")
     public void saveCopyLogDb(Copy copy) {
-        log.info("INSERT operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
-        CopiesAud copiesAud = buildInsertCopyAud(copy,readerDetails.getUsername());
+        log.info("CopyAud INSERT operation is being caught");
+        String owner = getOwner();
+        CopiesAud copiesAud = buildInsertCopyAud(copy,owner);
         copiesAudRepository.save(copiesAud);
-        log.info("INSERT operation is being recorded");
+        log.info("CopyAud INSERT operation is being recorded");
     }
 
     @Before("execution(* com.library.service.CopyService.changeCopyStatus(..))" +
             "&& args(id, status)")
-    public void updateBookLogDb(int id, Status status) {
-        log.info("UPDATE operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
+    public void updateCopyLogDb(int id, Status status) {
+        log.info("CopyAud UPDATE operation is being caught");
+        String owner = getOwner();
         if (copyRepository.existsById(id)) {
             Copy copy = copyRepository.findById(id).orElseThrow(ElementNotFoundException::new);
-            CopiesAud copiesAud = buildUpdateCopyAud(copy, status, readerDetails.getUsername());
+            CopiesAud copiesAud = buildUpdateCopyAud(copy, status, owner);
             copiesAudRepository.save(copiesAud);
-            log.info("UPDATE operation is being recorded");
+            log.info("CopyAud UPDATE operation is being recorded");
         }
     }
 
     @Before("execution(* com.library.service.CopyService.deleteCopy(..))" +
             "&& args(copyId)")
-    public void deleteBookLogDb(int copyId) {
-        log.info("DELETE operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
+    public void deleteCopyLogDb(int copyId) {
+        log.info("CopyAud DELETE operation is being caught");
+        String owner = getOwner();
         if (copyRepository.existsById(copyId)) {
             Copy copy = copyRepository.findById(copyId).orElseThrow(ElementNotFoundException::new);
-            CopiesAud copiesAud = buildDeleteCopyAud(copy, readerDetails.getUsername());
+            CopiesAud copiesAud = buildDeleteCopyAud(copy, owner);
             copiesAudRepository.save(copiesAud);
-            log.info("DELETE operation is being recorded");
+            log.info("CopyAud DELETE operation is being recorded");
         }
+    }
+
+    private String getOwner() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 
     private CopiesAud buildInsertCopyAud(Copy copy , String owner) {

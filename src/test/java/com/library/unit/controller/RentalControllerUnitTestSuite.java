@@ -6,7 +6,7 @@ import com.library.domain.Book;
 import com.library.domain.Copy;
 import com.library.domain.Reader;
 import com.library.domain.Rental;
-import com.library.service.ModelFillerService;
+import com.library.controllers.ModelFillerService;
 import com.library.service.facade.RentalFacade;
 import com.library.status.Status;
 import org.hamcrest.Matchers;

@@ -1,10 +1,10 @@
 package com.library.controllers;
 
 import com.library.domain.*;
-import com.library.service.ModelFillerService;
 import com.library.service.facade.RentalFacade;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +15,7 @@ import java.util.Map;
 @Data
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class RentalController {
 
     private final RentalFacade rentalFacade;
@@ -41,6 +42,7 @@ public class RentalController {
             Model model
     )
     {
+        log.info("Create Rental endpoint reached");
         Map<String, Object> modelMap = rentalFacade.createRental(readerDetails, bookId);
         modelFillerService.fullFillModel(model,modelMap);
         return "redirect:/reader/rentals";

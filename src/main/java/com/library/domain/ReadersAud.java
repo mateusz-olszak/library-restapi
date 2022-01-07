@@ -25,8 +25,7 @@ public class ReadersAud {
     private String newEmail;
     @Column(name = "CREATED")
     private Date created;
-    @Column(name = "CHANGES_MADE_BY")
-    private String audOwner;
     @Column(name = "EVENT_TYPE")
+    @Enumerated(EnumType.STRING)
     private Auditorium eventType;
 }

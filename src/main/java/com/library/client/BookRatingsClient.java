@@ -72,7 +72,7 @@ public class BookRatingsClient {
         return credential;
     }
 
-    public String getNewToken() throws IOException {
+    private String getNewToken() throws IOException {
         ArrayList<String> scopes = new ArrayList<>();
         scopes.add(clientConfig.getScope());
         TokenResponse tokenResponse = new GoogleRefreshTokenRequest(new NetHttpTransport(), new JacksonFactory(),

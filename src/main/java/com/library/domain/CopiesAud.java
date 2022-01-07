@@ -25,13 +25,16 @@ public class CopiesAud {
     @Column(name = "BOOK_ID")
     private Integer bookId;
     @Column(name = "OLD_STATUS")
+    @Enumerated(EnumType.STRING)
     private Status oldStatus;
     @Column(name = "NEW_STATUS")
+    @Enumerated(EnumType.STRING)
     private Status newStatus;
     @Column(name = "CREATED")
     private Date created;
     @Column(name = "CHANGED_MADE_BY")
     private String audOwner;
     @Column(name = "EVENT_TYPE")
+    @Enumerated(EnumType.STRING)
     private Auditorium audType;
 }

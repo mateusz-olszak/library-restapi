@@ -65,15 +65,12 @@ public class CopyUnitTestSuite {
         int newAmountOfCopies = 3;
         Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Copy copy = new Copy(book, Status.AVAILABLE);
-        Copy copyDb1 = new Copy(book, Status.AVAILABLE);
-        Copy copyDb2 = new Copy(book, Status.AVAILABLE);
-        List<Copy> copiesDb = Arrays.asList(copyDb1,copyDb2);
-        when(copyRepository.findCopiesByBook_Id(anyInt())).thenReturn(copiesDb);
+        doNothing().when(copyRepository).deleteAllByBook_IdAndStatus(anyInt(),any());
         when(copyRepository.save(any())).thenReturn(copy);
         // When
         copyService.updateAmountOfCopies(book, newAmountOfCopies);
         // Then
-        verify(copyRepository, times(1)).save(any());
+        verify(copyRepository, times(3)).save(any());
     }
 
     @Test
@@ -82,10 +79,7 @@ public class CopyUnitTestSuite {
         int newAmountOfCopies = 1;
         Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Copy copy = new Copy(book, Status.AVAILABLE);
-        Copy copyDb1 = new Copy(book, Status.AVAILABLE);
-        Copy copyDb2 = new Copy(book, Status.AVAILABLE);
-        List<Copy> copiesDb = Arrays.asList(copyDb1,copyDb2);
-        when(copyRepository.findCopiesByBook_Id(anyInt())).thenReturn(copiesDb);
+        doNothing().when(copyRepository).deleteAllByBook_IdAndStatus(anyInt(),any());
         when(copyRepository.save(any())).thenReturn(copy);
         // When
         copyService.updateAmountOfCopies(book, newAmountOfCopies);
@@ -99,8 +93,7 @@ public class CopyUnitTestSuite {
         int amountOfCopies = 3;
         Book book = Book.builder().author("BookAuthor").title("BookTitle").description("BookDesc").yearOfPublication(1948).build();
         Copy copy = new Copy(book, Status.AVAILABLE);
-        List<Copy> copiesDb = Collections.emptyList();
-        when(copyRepository.findCopiesByBook_Id(anyInt())).thenReturn(copiesDb);
+        doNothing().when(copyRepository).deleteAllByBook_IdAndStatus(anyInt(),any());
         when(copyRepository.save(any())).thenReturn(copy);
         // When
         copyService.updateAmountOfCopies(book,amountOfCopies);

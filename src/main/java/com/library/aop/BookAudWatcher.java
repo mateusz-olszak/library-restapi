@@ -31,38 +31,40 @@ public class BookAudWatcher {
     @After("execution(* com.library.service.BookService.saveBook(..))" +
             "&& args(book)")
     public void saveBookLogDb(Book book) {
-        log.info("INSERT operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
-        BooksAud booksAud = buildSaveBookAud(book, readerDetails.getUsername());
+        log.info("BookAud INSERT operation is being caught");
+        String owner = getOwner();
+        BooksAud booksAud = buildSaveBookAud(book, owner);
         booksAudRepository.save(booksAud);
-        log.info("INSERT operation is being recorded");
+        log.info("BookAud INSERT operation is being recorded");
     }
 
     @Before("execution(* com.library.service.BookService.deleteBook(..))" +
             "&& args(bookId)")
     public void deleteBookLogDb(int bookId) {
-        log.info("DELETE operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
+        log.info("BookAud DELETE operation is being caught");
+        String owner = getOwner();
         Book book = bookRepository.findById(bookId).orElseThrow(ElementNotFoundException::new);
-        BooksAud booksAud = buildDeleteBooksAud(book, readerDetails.getUsername());
+        BooksAud booksAud = buildDeleteBooksAud(book, owner);
         booksAudRepository.save(booksAud);
-        log.info("DELETE operation is being recorded");
+        log.info("BookAud DELETE operation is being recorded");
     }
 
     @Before("execution(* com.library.service.BookService.updateBook(..))" +
             "&& args(book)")
     public void updateBookLogDb(BookDto book) {
-        log.info("UPDATE operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
+        log.info("BookAud UPDATE operation is being caught");
+        String owner = getOwner();
         if (bookRepository.existsById(book.getId())) {
             Book oldBook = bookRepository.findById(book.getId()).orElseThrow(ElementNotFoundException::new);
-            BooksAud booksAud = buildUpdateBookAud(oldBook, book, readerDetails.getUsername());
+            BooksAud booksAud = buildUpdateBookAud(oldBook, book, owner);
             booksAudRepository.save(booksAud);
-            log.info("UPDATE operation is being recorded");
+            log.info("BookAud UPDATE operation is being recorded");
         }
+    }
+
+    private String getOwner() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 
     private BooksAud buildSaveBookAud(Book book, String owner) {

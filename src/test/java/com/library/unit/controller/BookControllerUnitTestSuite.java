@@ -6,7 +6,7 @@ import com.library.dto.books.BookDto;
 import com.library.dto.books.RentalDto;
 import com.library.dto.googleapi.GoogleImageLinksDto;
 import com.library.dto.googleapi.GoogleVolumeInfoDto;
-import com.library.service.ModelFillerService;
+import com.library.controllers.ModelFillerService;
 import com.library.service.facade.BookFacade;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

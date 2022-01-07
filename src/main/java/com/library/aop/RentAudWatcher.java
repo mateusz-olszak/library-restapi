@@ -28,39 +28,41 @@ public class RentAudWatcher {
 
     @After("execution(* com.library.service.RentalService.createRental(..))" +
             "&& args(rental)")
-    public void saveRentalLogDb(Rental rental) {
-        log.info("INSERT operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
-        RentsAud rentsAud = buildInsertRentAud(rental, readerDetails.getUsername());
+    public void buildSaveRentAud(Rental rental) {
+        log.info("RentAud INSERT operation is being caught");
+        String owner = getOwner();
+        RentsAud rentsAud = buildInsertRentAud(rental, owner);
         rentAudRepository.save(rentsAud);
-        log.info("INSERT operation is being recorded");
+        log.info("RentAud INSERT operation is being recorded");
     }
 
     @Before("execution(* com.library.service.RentalService.deleteRental(..))" +
             "&& args(rentalId)")
-    public void deleteRentalLogDb(int rentalId) {
-        log.info("DELETE operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
+    public void buildDeleteRentAud(int rentalId) {
+        log.info("RentAud DELETE operation is being caught");
+        String owner = getOwner();
         Rental rental = rentalRepository.findById(rentalId).orElseThrow(ElementNotFoundException::new);
-        RentsAud rentsAud = buildDeleteRentAud(rental, readerDetails.getUsername());
+        RentsAud rentsAud = buildDeleteRentAud(rental, owner);
         rentAudRepository.save(rentsAud);
-        log.info("DELETE operation is being recorded");
+        log.info("RentAud DELETE operation is being recorded");
     }
 
     @Before("execution(* com.library.service.RentalService.completeRental(..))" +
             "&& args(rental)")
-    public void updateRentalLogDb(Rental rental) {
-        log.info("UPDATE operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
+    public void buildUpdateRentAud(Rental rental) {
+        log.info("RentAud UPDATE operation is being caught");
+        String owner = getOwner();
         if (rentalRepository.existsById(rental.getId())) {
             Rental oldRental = rentalRepository.findById(rental.getId()).orElseThrow(ElementNotFoundException::new);
-            RentsAud rentsAud = buildUpdateRentAud(oldRental, rental, readerDetails.getUsername());
+            RentsAud rentsAud = buildUpdateRentAud(oldRental, rental, owner);
             rentAudRepository.save(rentsAud);
-            log.info("UPDATE operation is being recorded");
+            log.info("RentAud UPDATE operation is being recorded");
         }
+    }
+
+    private String getOwner() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 
     private RentsAud buildInsertRentAud(Rental rental, String owner) {

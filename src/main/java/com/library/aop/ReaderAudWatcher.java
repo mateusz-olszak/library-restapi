@@ -28,41 +28,35 @@ public class ReaderAudWatcher {
     @After("execution(* com.library.service.ReaderService.saveReader(..))" +
             "&& args(reader)")
     public void saveReaderLogDb(Reader reader) {
-        log.info("INSERT operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
-        ReadersAud readersAud = buildInsertReaderAud(reader.getEmail(), readerDetails.getUsername());
+        log.info("ReaderAud INSERT operation is being caught");
+        ReadersAud readersAud = buildInsertReaderAud(reader.getEmail());
         readersAudRepository.save(readersAud);
-        log.info("INSERT operation is being recorded");
+        log.info("ReaderAud INSERT operation is being recorded");
     }
 
     @Before("execution(* com.library.service.ReaderService.deleteReader(..))" +
             "&& args(readerId)")
-    public void deleteBookLogDb(int readerId) {
-        log.info("DELETE operation is being caught");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ReaderDetails readerDetails = (ReaderDetails) authentication.getPrincipal();
+    public void deleteReaderLogDb(int readerId) {
+        log.info("ReaderAud DELETE operation is being caught");
         Reader reader = readerRepository.findById(readerId).orElseThrow(ElementNotFoundException::new);
-        ReadersAud readersAud = buildDeleteReadersAud(reader.getEmail(), readerDetails.getUsername());
+        ReadersAud readersAud = buildDeleteReadersAud(reader.getEmail());
         readersAudRepository.save(readersAud);
-        log.info("DELETE operation is being recorded");
+        log.info("ReaderAud DELETE operation is being recorded");
     }
 
-    private ReadersAud buildInsertReaderAud(String newEmail, String owner) {
+    private ReadersAud buildInsertReaderAud(String newEmail) {
         return ReadersAud.builder()
                 .newEmail(newEmail)
                 .created(new Date())
                 .eventType(Auditorium.INSERT)
-                .audOwner(owner)
                 .build();
     }
 
-    private ReadersAud buildDeleteReadersAud(String oldEmail, String owner) {
+    private ReadersAud buildDeleteReadersAud(String oldEmail) {
         return ReadersAud.builder()
                 .oldEmail(oldEmail)
                 .created(new Date())
                 .eventType(Auditorium.DELETE)
-                .audOwner(owner)
                 .build();
     }
 }

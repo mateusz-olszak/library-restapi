@@ -7,6 +7,7 @@ import com.library.service.ReaderService;
 import com.library.service.RentalService;
 import com.library.status.Status;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
@@ -17,6 +18,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class RentalFacade {
 
     private final RentalService rentalService;
@@ -41,6 +43,7 @@ public class RentalFacade {
     }
 
     public Map<String,Object> createRental(ReaderDetails readerDetails, int bookId) {
+        log.info("Rental is about to be created");
         Map<String, Object> modelMap = new HashMap<>();
         Reader reader = readerService.findReaderByEmail(readerDetails.getUsername());
         Copy copy = copyService.retrieveAvailableCopiesForGivenId(bookId).stream().findFirst().get();

@@ -19,6 +19,7 @@
             <tr th:if="${books.size() > 0}" th:each="book: ${books}">
                 <th scope="row">
                     <img th:if="${book.getPhoto() != null && book.getGoogleVolumeInfoDto().getGoogleImageLinksDto() == null}" th:src="${book.getPhoto()}">
+                    <img th:if="${book.getPhoto() != null && book.getGoogleVolumeInfoDto().getGoogleImageLinksDto() != null}" th:src="${book.getPhoto()}">
                     <img th:if="${book.getPhoto() == null && book.getGoogleVolumeInfoDto().getGoogleImageLinksDto() != null}" th:src="${book.getGoogleVolumeInfoDto().getGoogleImageLinksDto().getSmallThumbnail()}">
                     <span th:if="${book.getPhoto() == null && book.getGoogleVolumeInfoDto().getGoogleImageLinksDto() == null}" class="far fa-book fa-2x"></span>
                 </th>
