@@ -1,1 +1,1 @@
-web: java -jar target/kodilla-library-1.0.0.jar
+web: java -jar build/libs/kodilla-library-0.0.1-SNAPSHOT.jar
